@@ -160,6 +160,30 @@ Because procedural macros simply take in and return a stream of rust tokens, i.e
 
 It also tends to become it's own mini-language with less documentation and support. Dealing with macros in rust is also just painful and they can increase compile times.
 
+### Derive macros
+
+```rust
+use agape::{widgets::*};
+#[derive(Widget)]
+struct SubscribeButton {
+	id: GlobalId,
+	#[child]
+	child: Button<Text>
+}
+
+impl SubscribeButton {
+	pub fn new() -> Self {
+		let child = Button::new()
+			.on_click(||println!("Subscribed!"))
+			
+		Self{
+			id: GlobalId::new(),
+			child
+		}
+	}
+}
+```
+
 ### Elm architecture
 [Point in time](https://github.com/snubwoody/agape-rs/tree/eaeb0950472b3ad022cee3a89abe3cf9fcfff85d)
 
@@ -200,7 +224,7 @@ impl View for Widget{
 	type Widget: Button;
 	
 	fn update(&self, _: &State, messages: &mut MessageQueue){
-		if let Some(_) = messages.get<Subscribed>{
+		if messages.has<Subscribed>{
 			println!("Subscribed!");
 		}
 	}
@@ -218,29 +242,6 @@ It's hard to manage global state like this, like the tab index...
 
 Although I think of all the architectures I tried this would be the best.
 
-### Derive macros
-
-```rust
-use agape::{widgets::*};
-#[derive(Widget)]
-struct SubscribeButton {
-	id: GlobalId,
-	#[child]
-	child: Button<Text>
-}
-
-impl SubscribeButton {
-	pub fn new() -> Self {
-		let child = Button::new()
-			.on_click(||println!("Subscribed!"))
-			
-		Self{
-			id: GlobalId::new(),
-			child
-		}
-	}
-}
-```
 
 ## Events
 Graphical applications are driven by events: do `this` when the user presses that button. In most frameworks/languages this is implemented as a simple function, so you can do whatever you would like.
@@ -254,16 +255,15 @@ Graphical applications are driven by events: do `this` when the user presses tha
 **Flutter:**
 
 ```dart
-class SubscribeButton extends StatelessComponent{
-	const SubscribeButton({super.key});
+class DeleteAccount extends StatelessComponent{
+	final String accountId;
+	const DeleteAccount({super.key, required this.accountId});
 	
 	@override
 	Widget build(BuildContext context){
 		return ElevatedButton{
-			onClick: (){
-				print("Subscribed")
-			}
-			child: Text("Subscribe")
+			onClick: () => deleteAccount(accountId)
+			child: Text("Delete account")
 		}
 	}
 }
@@ -273,46 +273,37 @@ class SubscribeButton extends StatelessComponent{
 
 ```kotlin
 @Composable
-fun SubscribeButton() {
+fun DeleteAccount() {
+	// TODO: check this
     Button(onClick = { print("") }) {
-        Text("Filled")
+        Text("Delete account")
     }
 }
 ```
 
-So my idea was to implement the same thing in rust, using closures
+So my idea was to implement the same thing in rust, using closures:
 
 ```rust
-#[derive(Default)]
-struct SubscribeButton;
+use agape::{App,widgets::*};
+use auth::delete_account;
 
-impl Widget for SubscribeButton{
-	// You can't return impl
-	fn build(&self) -> impl Widget{
-		Button::new()
-			.on_click(||println!("Subscribed"))
+struct DeleteAccount {
+	account_id: String
+}
+
+impl View for DeleteAccount {
+	type Widget = Button<Text>;
+	
+	
+	fn view(&self) -> Self::Widget {
+		// Won't compile
+		Button::text("Delete account")
+			.on_click(||delete_account(&self.account_id));
 	}
 }
 ```
 
-Makes sense right? The issue is that closures have very unergonomic semantics. Closures capture their environment which means you either have to move values into the closure or pass by reference. If you pass by reference the reference must live at least as long as the closure (otherwise it's an invalid reference). This means it's basically impossible to use the own widget's data in the closure.
-
-```rust
-#[derive(Default)]
-struct SubscribeButton{
-	subscribe_message: String
-}
-
-impl Widget for SubscribeButton{
-	// You can't return impl
-	fn build(&self) -> impl Widget{
-		// Can't pass self, won't live long enough
-		Button::new()
-			.on_click(||println!("{}",&self.subscribe_message))
-	}
-}
-
-```
+The issue is that closures have very unergonomic semantics. Closures capture their environment which means you either have to move values into the closure or pass by reference. If you pass by reference the reference must live at least as long as the closure (otherwise it's an invalid reference). This means it's basically impossible to use the widget's own data in the closure, which leads to more levels of indirection.
 
 The second half is storing closures is hard. Closures are traits:
 
@@ -335,8 +326,8 @@ struct Button<W: Widget>{
 
 This works fairly well, although it means that your types won't be clonable.
 
-
 ## State management
+...
 
 ## Async 
 
