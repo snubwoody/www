@@ -12,133 +12,400 @@ tags:
   - GUI 
 ---
 
-Animations?
+A while ago I went on an adventure creating my own GUI library in rust...
 
-Rust is an amazing candidate for graphical applications, it would be type safe, minimal and 
-have good performance. But after years of libraries in other sectors, GUI still feels quite lacking.
-There are good crates for sure, dioxus, tauri, iced, but as [areweguiyet](https://areweguiyet.com/)
-puts it:
+## Ideas
+- Immediate mode vs retained mode
+- No macros
+## Why rust?
+Well I just like rust so that's one. Two, I'm not sure if rust will ever be the primary choice for writing graphical software, other languages are just simpler to learn and (may) have an easier developer experience. I think every language needs a decent GUI library whether or not it will be **the** primary language. There are just situations where you need to draw stuff to the screen, like game engine, embedded software and so on. But there's definitely use cases for a GUI in rust. Maybe you're making an OS in rust (link redox), you definitely need to draw stuff to the screen.
 
-> The roots aren't deep, but the seeds are planted.
+- Blender uses a custom solution using OpenGL
+- Davinci Resolve is written in QT
 
+## Renderer
+Can't write widgets without something to draw them to the screen. I initially made my own (crappy) renderer using `wgpu`. This worked but it was buggy and slow and I soon realised that it is a project in itself so I switched to `tiny_skia`.  Font rendering...
 
-A really good GUI crate:
+## Layout
+I realised that most of the layout in a GUI is composed of rows, columns and individual widgets (add image). 
 
-- Needs good documentation
-- Easy to use
-- State management
+Furthermore, all widgets want to be one of three sizes:
 
-## Single ownership
-Rusts ownership model makes a lot of the standard approaches to UI libraries quite 
-difficult to implement. GUIs are made of composed of trees, which have nodes, which have children.
+- As large as possible
+- As small as possible
+- A specific fixed size
 
-```
-       Root widget
-           |
-    +------+------+
-    |      |      |
-  Button  Text   Text
-    |
- +--+--+  
- |     |
-Icon  Text
-    
-```
+By not using fixed sizes you allow the layout to be responsive and adapt to different screen sizes.
+## Retained mode vs Immediate mode
 
-Nodes need access to each other, the `Button` needs access to the `Icon` and `Text` to tell them
-where to position themselves, or vice versa. But rust doesn't do well with trees, a naive approach 
-would probably be composed of `Rc<RefCell<Node>>`. 
+A [retained mode](https://en.wikipedia.org/wiki/Retained_mode) GUI is one in which the library **retains** the scene/widget tree for rendering and the client uses abstractions such as widgets, views, components to describe the scene. Retained mode UI's are **very** abstracted and there is a lot of stuff going on behind the scenes, like in this Jetpack Compose [example](https://developer.android.com/develop/ui/compose/state):
 
-```rust
-use std::sync::RefCell;
-
-pub struct Tree{
-    nodes: Vec<Node>
-}
-
-pub struct Node{
-    parent: Rc<RefCell<Node>>,
-    children: Vec<Rc<RefCell<Node>>>
-}
-```
-
-Or worse a reference tower.
-
-```rust
-struct Tree<'tree>{
-    nodes: Vec<Node<'tree>>
-}
-
-struct Node<'node>{
-    parent: &'node mut Node<'node>,
-    children: Vec<&'node mut Node<'node>>
-}
-```
-
-Aside from the performance issues, this just wouldn't be good in the long run to develop. Another
-approach would be for data to flow strictly down, that way the tree could be made of nodes instead.
-
-```rust
-struct Tree{
-    nodes: Vec<Node>
-}
-
-struct Node{
-    children: Vec<Node>
-}
-```
-
-## Data flow
-
-The way you structure your trees has an impact on the way data flows.
-
-## Native
-
-A GUI library in rust would most likely expected to be cross platform. Cross platform
-and native don't really go together. Even if you did manage to adapt the bindings of one
-platform, extending to other major platforms would be close to impossible as there would
-be different expectations.
-
-Most platforms don't really have a single native GUI toolkit that you could simply use.
-
-## Web technology
-Look at the 5 most resource hungry apps on your desktop, it's probably browsers.
-
-## State management
-
-A GUI app is basically a heap of state that is represented onto the screen, state that needs to be
-accessed in multiple places at the same time, or very shortly after each other. These directly opposes
-rust's views of single ownership. State management is complex, thousands of libraries have been created.
-
-## To DSL or not to DSL
-
-Macros allow us to create our own domain specific languages, so the code can look like whatever 
-we want it to. It also partially eliminates the issues of ownership, as the code would expand to
-whatever you'd like behind the scenes.
-
-```rust
-use gui::dsl;
-
-dsl!{
-    Button{
-        on:click=sign_up()
-        "Sign up"
+```kotlin
+@Composable
+private fun HelloContent() {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = "Hello!",
+            modifier = Modifier.padding(bottom = 8.dp),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = { Text("Name") }
+        )
     }
 }
 ```
 
-Some crates have such complex domain specific languages that it becomes
-its own language, expect there's no language server and the IDE must 
-do its best to interpret this random sequence of tokens.
+An [immediate mode](https://en.wikipedia.org/wiki/Immediate_mode_(computer_graphics)) GUI is one in which you directly the primitives to draw to the screen frame by frame. Typically managing state and control flow yourself, like in this [egui](https://github.com/emilk/egui/tree/main?tab=readme-ov-file#example) example:
 
-## Alternative architecture
+```rust
+ui.heading("My egui Application");
+ui.horizontal(|ui| {
+    ui.label("Your name: ");
+    ui.text_edit_singleline(&mut name);
+});
+ui.add(egui::Slider::new(&mut age, 0..=120).text("age"));
+if ui.button("Increment").clicked() {
+    age += 1;
+}
+ui.label(format!("Hello '{name}', age {age}"));
+ui.image(egui::include_image!("ferris.png"));
+```
 
-## System libraries
-One disadvantage of cross platform tooling is
+There's different pros and cons to each. I chose retained mode because it's:
 
-## Text rendering
+- Easier to manage global state, e.g. tab index
+- Easier to add accessibility
 
-## Conclusion
-Some people think rust just isn't suited for GUI, there's way too many issues. I think
-just like game dev, we're working in an industry that already had a specific type of 
-architecture, and we have to come up with our own.
+It's a lot easier to manage widget states automatically like hover...
+It's also easier to cache data and not construct the widget tree every frame.
+
+## Widget tree
+
+In basically every GUI library the widgets are stored in a tree. Rust is based on ownership, so writing trees that have bidirectional data flow is hard. One approach is using reference counting and interior mutability.
+
+**TODO:** Replace this image
+
+![[widgets.png]]
+
+```rust
+use std::cell::RefCell;
+use std::rc::{Rc, Weak};
+
+pub struct Node {
+    parent: Option<Weak<RefCell<Node>>>,
+    children: Vec<Rc<RefCell<Node>>>,
+}
+
+impl Node {
+    fn new<I: IntoIterator>(parent: Weak<RefCell<Node>>,children:I) -> Self {
+        Node {
+            parent,
+            children: children.into_iter().collect(),
+        }
+    }
+    
+    // TODO: check this type
+    pub fn root<I: IntoIterator>(children: I) -> Self{
+	    parent: None,
+	    children: children.into_iter().collect()
+    }
+}
+```
+
+Apart from being horribly unergonomic, I feel like this would severely limit the library down the line. So I chose to implement a top-down approach instead, data only flows down. So every widget can own its child, playing nice with rust's ownership model.
+
+```rust
+pub trait Widget {
+	fn children(&self) -> &[&dyn Widget];
+	fn render(&self,renderer: &Renderer);
+}
+
+struct Button{
+	child: Box<dyn Widget>
+}
+
+impl Widget for Button{
+	pub fn children(&self) -> &[&dyn Widget]{
+		std::slice::from(&self.child);
+	}
+	
+	fn render(&self, renderer: &Renderer){
+		renderer.draw_rect(...);
+		child.render(&renderer);
+	}
+}
+```
+
+This has different trade offs but worked surprisingly well, and took me quite far.
+
+## Widget architecture
+Widgets have a lot of functionality, tab focus, focus states, layout, rendering, themes, when describing widgets you don't really want or need to handle all these things yourself.
+
+### Domain specific language
+
+One approach is to use macros to create a [Domain Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language). But the problem is that rust macros don't have great IDE support, especially procedural macros.
+
+```rust
+use agape::widgets::*;
+
+fn SubscribeButton() -> impl Widget{
+	widget!{
+		Button{
+			on_click: || println!("Subscribed"),
+			"Subscribe"
+		}
+	}
+}
+```
+
+Because procedural macros simply take in and return a stream of rust tokens, i.e. `TokenStream`, there isn't a defined syntax that IDE's can use for intellisense. It's essentially a black box.
+
+It also tends to become it's own mini-language with less documentation and support. Dealing with macros in rust is also just painful and they can increase compile times.
+
+### Derive macros
+
+```rust
+use agape::{widgets::*};
+#[derive(Widget)]
+struct SubscribeButton {
+	id: GlobalId,
+	#[child]
+	child: Button<Text>
+}
+
+impl SubscribeButton {
+	pub fn new() -> Self {
+		let child = Button::new()
+			.on_click(||println!("Subscribed!"))
+			
+		Self{
+			id: GlobalId::new(),
+			child
+		}
+	}
+}
+```
+
+### Elm architecture
+[Point in time](https://github.com/snubwoody/agape-rs/tree/eaeb0950472b3ad022cee3a89abe3cf9fcfff85d)
+
+I also tried implementing the [elm architecture](https://guide.elm-lang.org/architecture/), which is broken into three parts:
+
+- `Model`: The state of your application
+- `View`: A graphical representation of state
+- `Update`: A way to update state based on messages
+
+I was inspired by [Bubble Tea](https://github.com/charmbracelet/bubbletea?tab=readme-ov-file), while it's a terminal UI framework, the elm architecture seems to work quite well for it. So the idea is that you have a higher level struct (`View`) which returns a lower level struct (`Widget`).
+
+```rust
+pub trait View {
+    type Widget: Widget;
+    
+    fn update(&mut self, _: &State, _: &mut MessageQueue) {}
+    
+    fn view(&self) -> Self::Widget;
+}
+```
+
+This worked pretty well with rust's ownership model. The message queue was basically a `Vec` of the `Any` trait, so any type could be sent over. The reason the widget is a type is because you can't have generics in a trait and still have it be `dyn` compatible. Another option is returning a `Box<dyn Widget>`, which works but you would have to return `Box::new` every time and I just felt like that slightly annoying.
+
+```rust
+use agape::{App,widgets::*};
+
+fn main() {
+	App::new(SubscribeButton)
+		.run()
+}
+
+// Subscribe event
+struct Subscribed;
+
+struct SubscribeButton;
+
+impl View for Widget{
+	type Widget: Button;
+	
+	fn update(&self, _: &State, messages: &mut MessageQueue){
+		if messages.has<Subscribed>{
+			println!("Subscribed!");
+		}
+	}
+	
+	fn view(&self) -> Self::Widget{
+		Button::new()
+			.on_click(|msg|msg.add(Subscribed))
+	}
+}
+```
+
+It was quite hard to sync the trees, I also didn't really have a clear distinction of what a `View` is and what a `Widget` is, apart from one being higher level than the other. So it wasn't always clear what should be implemented where.
+
+It's hard to manage global state like this, like the tab index...
+
+Although I think of all the architectures I tried this would be the best.
+
+
+## Events
+Graphical applications are driven by events: do `this` when the user presses that button. In most frameworks/languages this is implemented as a simple function, so you can do whatever you would like.
+
+**HTML**: 
+
+```html
+<button onclick={()=>console.log("Subscribed")}>Subscribe</button>
+```
+
+**Flutter:**
+
+```dart
+class DeleteAccount extends StatelessComponent{
+	final String accountId;
+	const DeleteAccount({super.key, required this.accountId});
+	
+	@override
+	Widget build(BuildContext context){
+		return ElevatedButton{
+			onClick: () => deleteAccount(accountId)
+			child: Text("Delete account")
+		}
+	}
+}
+```
+
+**Jetpack compose:**
+
+```kotlin
+@Composable
+fun DeleteAccount() {
+	// TODO: check this
+    Button(onClick = { print("") }) {
+        Text("Delete account")
+    }
+}
+```
+
+So my idea was to implement the same thing in rust, using closures:
+
+```rust
+use agape::{App,widgets::*};
+use auth::delete_account;
+
+struct DeleteAccount {
+	account_id: String
+}
+
+impl View for DeleteAccount {
+	type Widget = Button<Text>;
+	
+	
+	fn view(&self) -> Self::Widget {
+		// Won't compile
+		Button::text("Delete account")
+			.on_click(||delete_account(&self.account_id));
+	}
+}
+```
+
+The issue is that closures have very unergonomic semantics. Closures capture their environment which means you either have to move values into the closure or pass by reference. If you pass by reference the reference must live at least as long as the closure (otherwise it's an invalid reference). This means it's basically impossible to use the widget's own data in the closure, which leads to more levels of indirection.
+
+The second half is storing closures is hard. Closures are traits:
+
+- [`Fn`](https://doc.rust-lang.org/std/ops/trait.Fn.html)
+- [`FnOnce`](https://doc.rust-lang.org/std/ops/trait.FnOnce.html)
+- [`FnMut`](https://doc.rust-lang.org/std/ops/trait.FnMut.html)
+
+`FnOnce` takes `Self` as a parameter, so it can only be run once (hence the name), you most likely want to run the action more than once, so that can't be used. `Fn` can not capture moved values and it can't mutate captured values, so `FnMut` is the only real choice.
+
+Since closures are traits they must be stored on the heap behind a pointer. So the first choice would probably to `Box` the closure.
+
+```rust
+use super::Widget;
+
+struct Button<W: Widget>{
+	on_click: Box<dyn FnMut()>
+	child: W
+}
+```
+
+This works fairly well, although it means that your types won't be clonable.
+
+## State management
+...
+
+The views always have current state
+
+## Async 
+
+I didn't get to this part but I was always wondering how async would be handled. GUI's are inherently async and you might to write async code, such as HTTP requests. The key problem here is how rust's async functions work: they are lazy.
+
+>Exactly, IMHO at least, JS doesn't suffer from the coloring problem because you can call async functions from sync functions (because the JS Promise machinery allows to fall back to completion callbacks instead of using await). It's the 'virality' of await which causes the coloring problem, but in JS you can freely mix await and completion callbacks for async operations).
+
+In Javascript and Dart you can call an async function from a sync function and it will run in the background.
+
+```html
+<script>
+	let userId = "...";
+	
+	async const deleteUser = (userId: string) => {
+		...
+	}
+</script>
+
+<button onclick={() => deleteUser(userId)}>
+	Delete account
+</button>
+```
+
+```dart
+class DeleteAccount extends StatelessWidget{
+	final String userId;
+	const SubscribeButton({super.key, required this.userId});
+	
+	Future<void> deleteUser() async{
+		...
+	}
+	
+	@override
+	Widget build(BuildContext context){
+		return Button{
+			onClick:() => deleteUser(),
+			child: Text("Delete account"),
+		}
+	}
+}
+```
+
+Even though we don't `await` the functions they still run in the background and for most purposes that's enough. In rust however, async functions are lazy, which means we must call `.await` to do any work on them. This means you can't have something like:
+
+```rust
+use agape::{widgets::*};
+
+async fn delete_user(user_id: &str) {
+	...
+}
+
+struct DeleteAccount;
+
+impl View for DeleteAccount{
+	type Widget = Button<Text>;
+	
+	fn view(&self) -> Self::Widget {
+		Button::text("Delete account")
+			.on_click(|| delete_user("..."))
+	}
+}
+```
+
+The async function will not do any work unless we `.await` it. This forces you into trying to fit a runtime somewhere in this, which gets ugly really fast. Some options (which I didn't try) are:
+
+- Add an `AsyncView` trait
+- Add a runtime in the view context
+- Add a global runtime
+
+I contemplated making the whole library async.
+
+## Resources
+
+- [Yew PR](https://github.com/yewstack/yew/pull/2972)
