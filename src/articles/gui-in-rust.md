@@ -1,5 +1,5 @@
 ---
-title: GUI in rust
+title: A GUI experiment 
 author: Wakunguma Kalimukwa
 synopsis: Today we'll go over interesting nightly rust features
 layout: ../../layouts/BlogLayout.astro
@@ -211,13 +211,13 @@ impl SubscribeButton {
 
 [Point in time](https://github.com/snubwoody/agape-rs/tree/eaeb0950472b3ad022cee3a89abe3cf9fcfff85d)
 
-I also tried implementing the [elm architecture](https://guide.elm-lang.org/architecture/), which is broken into three parts:
+Finally I settled on the [elm architecture](https://guide.elm-lang.org/architecture/), which is broken into three parts:
 
 - `Model`: The state of your application
 - `View`: A graphical representation of state
 - `Update`: A way to update state based on messages
 
-I was inspired by [Bubble Tea](https://github.com/charmbracelet/bubbletea?tab=readme-ov-file), while it's a terminal UI framework, the elm architecture seems to work quite well for it. So the idea is that you have a higher level struct (`View`) which returns a lower level struct (`Widget`).
+I was inspired by [Bubble Tea](https://github.com/charmbracelet/bubbletea?tab=readme-ov-file), while it's a terminal UI framework, the elm architecture seems to work quite well for it. So the idea is that you have a higher level object (`View`) which returns a lower level object (`Widget`), which actually handles state, layout and rendering .
 
 ```rust
 pub trait View {
@@ -229,45 +229,63 @@ pub trait View {
 }
 ```
 
-This worked pretty well with rust's ownership model. The message queue was basically a `Vec` of the `Any` trait, so any type could be sent over. The reason the widget is a type is because you can't have generics in a trait and still have it be `dyn` compatible. Another option is returning a `Box<dyn Widget>`, which works but you would have to return `Box::new` every time and I just felt like that slightly annoying.
+This worked pretty well with rust's ownership model. The message queue was basically a `Vec` of the `Any` trait, so any type could be sent over. The reason the widget is an associated type is because you can't have generics in a trait and still have it be `dyn` compatible. Another option is returning a `Box<dyn Widget>`, which works but you would have to return `Box::new` every time and I just felt like that slightly annoying.
 
 ```rust
-use agape::{App,widgets::*};
+use agape::state::Context;
+use agape::widgets::{Button, View, *};
+use agape::{App, MessageQueue, hstack};
 
-fn main() {
-	App::new(SubscribeButton)
-		.run()
+fn main() -> agape::Result<()> {
+    App::new(Counter::default()).run()
 }
 
-// Subscribe event
-struct Subscribed;
+#[derive(Debug)]
+struct Increment;
 
-struct SubscribeButton;
+#[derive(Debug)]
+struct Decrement;
 
-impl View for Widget{
-	type Widget: Button;
-	
-	fn update(&self, _: &State, messages: &mut MessageQueue){
-		if messages.has<Subscribed>{
-			println!("Subscribed!");
-		}
-	}
-	
-	fn view(&self) -> Self::Widget{
-		Button::new()
-			.on_click(|msg|msg.add(Subscribed))
-	}
+#[derive(Default)]
+struct Counter {
+    count: i32,
+}
+
+impl View for Counter {
+    type Widget = HStack;
+
+    fn update(&mut self, msg: &mut MessageQueue) {
+        if msg.has::<Increment>() {
+            self.count += 1;
+        }
+
+        if msg.has::<Decrement>() {
+            self.count -= 1;
+        }
+    }
+
+    fn view(&self, _: &mut Context) -> Self::Widget {
+        hstack![
+            Button::text("Subtract").on_click(|msg| msg.add(Decrement)),
+            Text::new(&format!("{}", self.count)),
+            Button::text("Add").on_click(|msg| msg.add(Increment)),
+        ]
+        .spacing(24)
+        .fill()
+        .align_center()
+    }
 }
 ```
 
 It was quite hard to sync the trees, I also didn't really have a clear distinction of what a `View` is and what a `Widget` is, apart from one being higher level than the other. So it wasn't always clear what should be implemented where.
 
-It's hard to manage global state like this, like the tab index...
-
 Although I think of all the architectures I tried this would be the best.
 
 
 ## Events
+
+Because of the elm architecture I didn't experience this much, but I thought it would be important to note...
+
 Graphical applications are driven by events: do `this` when the user presses that button. In most frameworks/languages this is implemented as a simple function, so you can do whatever you would like.
 
 **HTML**: 
@@ -279,17 +297,17 @@ Graphical applications are driven by events: do `this` when the user presses tha
 **Flutter:**
 
 ```dart
-class DeleteAccount extends StatelessComponent{
-	final String accountId;
-	const DeleteAccount({super.key, required this.accountId});
-	
-	@override
-	Widget build(BuildContext context){
-		return ElevatedButton{
-			onClick: () => deleteAccount(accountId)
-			child: Text("Delete account")
-		}
-	}
+class DeleteAccount extends StatelessWidget{
+    final String accountId;
+    const DeleteAccount({super.key, required this.accountId});
+
+    @override
+    Widget build(BuildContext context) {
+        return ElevatedButton {
+            onClick: () => deleteAccount(accountId)
+            child: Text("Delete account")   
+        }
+    }
 }
 ```
 
@@ -298,7 +316,7 @@ class DeleteAccount extends StatelessComponent{
 ```kotlin
 @Composable
 fun DeleteAccount() {
-	// TODO: check this
+    // TODO: check this
     Button(onClick = { print("") }) {
         Text("Delete account")
     }
@@ -312,22 +330,22 @@ use agape::{App,widgets::*};
 use auth::delete_account;
 
 struct DeleteAccount {
-	account_id: String
+    account_id: String
 }
 
 impl View for DeleteAccount {
-	type Widget = Button<Text>;
-	
-	
-	fn view(&self) -> Self::Widget {
-		// Won't compile
-		Button::text("Delete account")
-			.on_click(||delete_account(&self.account_id));
-	}
+    type Widget = Button<Text>;
+
+
+    fn view(&self) -> Self::Widget {
+        // Won't compile
+        Button::text("Delete account")
+            .on_click(||delete_account(&self.account_id));
+    }
 }
 ```
 
-The issue is that closures have very unergonomic semantics. Closures capture their environment which means you either have to move values into the closure or pass by reference. If you pass by reference the reference must live at least as long as the closure (otherwise it's an invalid reference). This means it's basically impossible to use the widget's own data in the closure, which leads to more levels of indirection.
+The issue is that closures have very unergonomic semantics. Closures capture their environment which means you either have to move values into the closure or pass by reference. If you pass by reference, the reference must live at least as long as the closure (otherwise it's an invalid reference). This means it's basically impossible to use the widget's own data in the closure, which leads to more levels of indirection.
 
 The second half is storing closures is hard. Closures are traits:
 
@@ -335,7 +353,7 @@ The second half is storing closures is hard. Closures are traits:
 - [`FnOnce`](https://doc.rust-lang.org/std/ops/trait.FnOnce.html)
 - [`FnMut`](https://doc.rust-lang.org/std/ops/trait.FnMut.html)
 
-`FnOnce` takes `Self` as a parameter, so it can only be run once (hence the name), you most likely want to run the action more than once, so that can't be used. `Fn` can not capture moved values and it can't mutate captured values, so `FnMut` is the only real choice.
+`FnOnce` takes `Self` as a parameter, so it can only be run once, you most likely want to run the action more than once, so that can't be used. `Fn` can not capture moved values and it can't mutate captured values, so `FnMut` is the only real choice.
 
 Since closures are traits they must be stored on the heap behind a pointer. So the first choice would probably to `Box` the closure.
 
@@ -343,19 +361,15 @@ Since closures are traits they must be stored on the heap behind a pointer. So t
 use super::Widget;
 
 struct Button<W: Widget>{
-	on_click: Box<dyn FnMut()>
-	child: W
+    on_click: Box<dyn FnMut()>
+    child: W
 }
 ```
 
 This works fairly well, although it means that your types won't be clonable.
 
-## State management
-...
 
-The views always have current state
-
-## Async 
+## Async
 
 I didn't get to this part but I was always wondering how async would be handled. GUI's are inherently async and you might to write async code, such as HTTP requests. The key problem here is how rust's async functions work: they are lazy.
 
@@ -364,35 +378,35 @@ I didn't get to this part but I was always wondering how async would be handled.
 In Javascript and Dart you can call an async function from a sync function and it will run in the background.
 
 ```html
-<script>
-	let userId = "...";
-	
-	async const deleteUser = (userId: string) => {
-		...
-	}
+<script lang="ts">
+    let userId = "...";
+
+    async const deleteUser = (userId: string) => {
+        ...
+    }
 </script>
 
 <button onclick={() => deleteUser(userId)}>
-	Delete account
+    Delete account
 </button>
 ```
 
 ```dart
 class DeleteAccount extends StatelessWidget{
-	final String userId;
-	const SubscribeButton({super.key, required this.userId});
-	
-	Future<void> deleteUser() async{
-		...
-	}
-	
-	@override
-	Widget build(BuildContext context){
-		return Button{
-			onClick:() => deleteUser(),
-			child: Text("Delete account"),
-		}
-	}
+    final String userId;
+    const SubscribeButton({super.key, required this.userId});
+    
+    Future<void> deleteUser() async{
+        ...
+    }
+    
+    @override
+    Widget build(BuildContext context){
+        return Button{
+            onClick:() => deleteUser(),
+            child: Text("Delete account"),
+        }
+    }
 }
 ```
 
