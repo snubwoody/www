@@ -15,25 +15,38 @@ tags:
 A while ago I went on an adventure creating my own GUI library in rust...
 
 ## Ideas
+
 - Immediate mode vs retained mode
 - No macros
+
 ## Why rust?
-Well I just like rust so that's one. Two, I'm not sure if rust will ever be the primary choice for writing graphical software, other languages are just simpler to learn and (may) have an easier developer experience. I think every language needs a decent GUI library whether or not it will be **the** primary language. There are just situations where you need to draw stuff to the screen, like game engine, embedded software and so on. But there's definitely use cases for a GUI in rust. Maybe you're making an OS in rust (link redox), you definitely need to draw stuff to the screen.
+
+Well I just like rust so that's one. Two, I'm not sure if rust will ever be the primary choice for writing graphical software, other languages are just simpler to learn and (may) have an easier developer experience. 
+
+I think every language needs a decent GUI library whether or not it will be **the** primary language. There are just situations where you need to draw stuff to the screen, like game engines, embedded software and so on. But there's definitely use cases for a GUI in rust. Maybe you're making an OS in rust (link redox), you definitely need to draw stuff to the screen.
 
 - Blender uses a custom solution using OpenGL
 - Davinci Resolve is written in QT
 
 ## Renderer
+
 Can't write widgets without something to draw them to the screen. I initially made my own (crappy) renderer using `wgpu`. This worked but it was buggy and slow and I soon realised that it is a project in itself so I switched to `tiny_skia`.  Font rendering...
 
 ## Layout
+
 I realised that most of the layout in a GUI is composed of rows, columns and individual widgets (add image). 
 
-Furthermore,
+Furthermore, all widgets want to be one of three sizes:
+
+- As large as possible
+- As small as possible
+- A specific fixed size
+
 By not using fixed sizes you allow the layout to be responsive and adapt to different screen sizes.
+
 ## Retained mode vs Immediate mode
 
-A [retained mode](https://en.wikipedia.org/wiki/Retained_mode) GUI is one in which the library **retains** the scene/widget tree for rendering and the client uses abstractions such as widgets, views, components to describe the scene. Retained mode UI's are **very** abstracted and there is a lot of stuff going on behind the scenes, like in this Jetpack Compose [example](https://developer.android.com/develop/ui/compose/state):
+In a [retained mode](https://en.wikipedia.org/wiki/Retained_mode) GUI the framework/library **retains** the widget tree for rendering and the client uses abstractions such as widgets, views or components to describe the scene. Retained mode UI's are **very** abstracted and there is a lot of stuff going on behind the scenes, like in this Jetpack Compose [example](https://developer.android.com/develop/ui/compose/state):
 
 ```kotlin
 @Composable
@@ -53,7 +66,7 @@ private fun HelloContent() {
 }
 ```
 
-An [immediate mode](https://en.wikipedia.org/wiki/Immediate_mode_(computer_graphics)) GUI is one in which you directly the primitives to draw to each screen frame by frame. Typically managing state and control flow yourself, like in this [egui](https://github.com/emilk/egui/tree/main?tab=readme-ov-file#example) example:
+In an [immediate mode](https://en.wikipedia.org/wiki/Immediate_mode_(computer_graphics)) GUI you directly the control the primitives that are drawn to the screen each frame. Typically managing state and control flow yourself, like in this [egui](https://github.com/emilk/egui/tree/main?tab=readme-ov-file#example) example:
 
 ```rust
 ui.heading("My egui Application");
@@ -69,13 +82,11 @@ ui.label(format!("Hello '{name}', age {age}"));
 ui.image(egui::include_image!("ferris.png"));
 ```
 
-There's different pros and cons to each. I chose retained mode:
+There's different pros and cons to each. I chose retained mode because it's:
 
 - Easier to manage global state, e.g. tab index
 - Easier to add accessibility
-
-It's a lot easier to manage widget states automatically like hover...
-It's also easier to cache data and not construct the widget tree every frame.
+- Typically less verbose
 
 ## Widget tree
 
@@ -329,6 +340,8 @@ This works fairly well, although it means that your types won't be clonable.
 ## State management
 ...
 
+The views always have current state
+
 ## Async 
 
 I didn't get to this part but I was always wondering how async would be handled. GUI's are inherently async and you might to write async code, such as HTTP requests. The key problem here is how rust's async functions work: they are lazy.
@@ -352,9 +365,9 @@ In Javascript and Dart you can call an async function from a sync function and i
 ```
 
 ```dart
-class SubscribeButton extends StatelessWidget{
-	final String _userId = "";
-	const SubscribeButton({super.key});
+class DeleteAccount extends StatelessWidget{
+	final String userId;
+	const SubscribeButton({super.key, required this.userId});
 	
 	Future<void> deleteUser() async{
 		...
@@ -370,7 +383,7 @@ class SubscribeButton extends StatelessWidget{
 }
 ```
 
-Even though we don't `await` the functions they still run in the background and for most purposes that's enough. In rust however, async functions are lazy, which means we must call `.await` to do any work on them. This means you can't have something as simple as:
+Even though we don't `await` the functions they still run in the background and for most purposes that's enough. In rust however, async functions are lazy, which means we must call `.await` to do any work on them. This means you can't have something like:
 
 ```rust
 use agape::{widgets::*};
@@ -379,17 +392,23 @@ async fn delete_user(user_id: &str) {
 	...
 }
 
-struct SubscribeButton;
+struct DeleteAccount;
 
-impl Widget for SubscribeButton{
-	fn build(&self) -> impl Widget {
+impl View for DeleteAccount{
+	type Widget = Button<Text>;
+	
+	fn view(&self) -> Self::Widget {
 		Button::text("Delete account")
 			.on_click(|| delete_user("..."))
 	}
 }
 ```
 
-This forces you into trying to fit a runtime somewhere in this, which gets ugly really fast.
+The async function will not do any work unless we `.await` it. This forces you into trying to fit a runtime somewhere in this, which gets ugly really fast. Some options (which I didn't try) are:
+
+- Add an `AsyncView` trait
+- Add a runtime in the view context
+- Add a global runtime
 
 I contemplated making the whole library async.
 
