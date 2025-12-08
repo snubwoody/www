@@ -3,7 +3,7 @@ title: GUI in rust
 author: Wakunguma Kalimukwa
 synopsis: Today we'll go over interesting nightly rust features
 layout: ../../layouts/BlogLayout.astro
-published: 2025-05-12
+published: 2025-12-12
 preview: false
 image: /internal/thumbnails/rust-nightly-features.png
 imageAsset: ../assets/internal/thumbnails/rust-nightly-features.png
@@ -90,11 +90,15 @@ There's different pros and cons to each. I chose retained mode because it's:
 
 ## Widget tree
 
-In basically every GUI library the widgets are stored in a tree. Rust is based on ownership, so writing trees that have bidirectional data flow is hard. One approach is using reference counting and interior mutability.
+In most, if not all, GUI libraries the widgets are stored in a tree, with each widget potentially having one or more child widgets.
 
 **TODO:** Replace this image
 
 ![[widgets.png]]
+
+Rust is based on ownership, so writing a tree data stucture that has bidirectional data flow is difficuly. One approach is using reference counting and interior mutability.
+
+**TODO:** Check this IntoIterator
 
 ```rust
 use std::cell::RefCell;
@@ -121,81 +125,90 @@ impl Node {
 }
 ```
 
-Apart from being horribly unergonomic, I feel like this would severely limit the library down the line. So I chose to implement a top-down approach instead, data only flows down. So every widget can own its child, playing nice with rust's ownership model.
+Apart from being quite unergonomic, I feel like this would severely limit the library's architecture down the line. So I chose to implement a top-down approach instead: data only flows down. So every widget can own its child, playing nice with rust's ownership model.
 
 ```rust
 pub trait Widget {
-	fn children(&self) -> &[&dyn Widget];
-	fn render(&self,renderer: &Renderer);
+    fn children(&self) -> &[&dyn Widget];
+    fn render(&self,renderer: &Renderer);
 }
 
 struct Button{
-	child: Box<dyn Widget>
+    child: Box<dyn Widget>
 }
 
 impl Widget for Button{
-	pub fn children(&self) -> &[&dyn Widget]{
-		std::slice::from(&self.child);
-	}
-	
-	fn render(&self, renderer: &Renderer){
-		renderer.draw_rect(...);
-		child.render(&renderer);
-	}
+    pub fn children(&self) -> &[&dyn Widget]{
+        std::slice::from(&self.child);
+    }
+
+    fn render(&self, renderer: &Renderer){
+        renderer.draw_rect(...);
+        child.render(&renderer);
+    }
 }
 ```
 
 This has different trade offs but worked surprisingly well, and took me quite far.
 
 ## Widget architecture
+
 Widgets have a lot of functionality, tab focus, focus states, layout, rendering, themes, when describing widgets you don't really want or need to handle all these things yourself.
 
 ### Domain specific language
 
-One approach is to use macros to create a [Domain Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language). But the problem is that rust macros don't have great IDE support, especially procedural macros.
+One approach is to use macros to create a [Domain Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language) for describing widgets.
 
 ```rust
 use agape::widgets::*;
 
 fn SubscribeButton() -> impl Widget{
-	widget!{
-		Button{
-			on_click: || println!("Subscribed"),
-			"Subscribe"
-		}
-	}
+    widget!{
+        Button{
+            on_click: || println!("Subscribed"),
+            "Subscribe"
+        }
+    }
 }
 ```
 
-Because procedural macros simply take in and return a stream of rust tokens, i.e. `TokenStream`, there isn't a defined syntax that IDE's can use for intellisense. It's essentially a black box.
+But the problem is that rust macros don't have great IDE support, especially procedural macros.
+Because procedural macros simply take in and return a stream of rust tokens, i.e. `TokenStream`, there isn't a defined syntax that IDE's can use for intellisense; It's a black box.
 
-It also tends to become it's own mini-language with less documentation and support. Dealing with macros in rust is also just painful and they can increase compile times.
+Also macros tend to have bad documentation, more than other rust items. You essentially have a mini-programming language,
+but people tend to not put in as much effort into documenting this new language. So you end up with a worse subset of rust.
+
+They also increase compile times.
 
 ### Derive macros
 
+This was another option I explored but macros are hard and I couldn't get it to work.
+
 ```rust
 use agape::{widgets::*};
+
 #[derive(Widget)]
 struct SubscribeButton {
-	id: GlobalId,
-	#[child]
-	child: Button<Text>
+    id: GlobalId,
+    #[child]
+    child: Button<Text>
 }
 
 impl SubscribeButton {
-	pub fn new() -> Self {
-		let child = Button::new()
-			.on_click(||println!("Subscribed!"))
-			
-		Self{
-			id: GlobalId::new(),
-			child
-		}
-	}
+    pub fn new() -> Self {
+        let child = Button::new()
+            .on_click(||println!("Subscribed!"))
+    
+        Self{
+            id: GlobalId::new(),
+            child
+        }
+    }
 }
 ```
 
 ### Elm architecture
+
 [Point in time](https://github.com/snubwoody/agape-rs/tree/eaeb0950472b3ad022cee3a89abe3cf9fcfff85d)
 
 I also tried implementing the [elm architecture](https://guide.elm-lang.org/architecture/), which is broken into three parts:
