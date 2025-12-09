@@ -35,6 +35,10 @@ Can't write widgets without something to draw them to the screen. I initially ma
 ## Layout
 
 I realised that most of the layout in a GUI is composed of rows, columns and individual widgets (add image). 
+Like this home page of [mason and fifth](https://mason-fifth.com/).
+
+![Layout](../assets/internal/gui-in-rust/screenshot.png)
+
 
 Furthermore, all widgets want to be one of three sizes:
 
@@ -92,7 +96,7 @@ There's different pros and cons to each. I chose retained mode because it's:
 
 In most, if not all, GUI libraries the widgets are stored in a tree, with each widget potentially having one or more child widgets.
 
-![Widget tree](../assets/internal/widget-tree.png)
+![Widget tree](../assets/internal/gui-in-rust/widget-tree.png)
 
 Rust is based on ownership, so writing a tree data stucture that has bidirectional data flow is difficuly. One approach is using reference counting and interior mutability.
 
