@@ -92,9 +92,7 @@ There's different pros and cons to each. I chose retained mode because it's:
 
 In most, if not all, GUI libraries the widgets are stored in a tree, with each widget potentially having one or more child widgets.
 
-**TODO:** Replace this image
-
-![[widgets.png]]
+![Widget tree](../assets/internal/widget-tree.png)
 
 Rust is based on ownership, so writing a tree data stucture that has bidirectional data flow is difficuly. One approach is using reference counting and interior mutability.
 
@@ -119,8 +117,8 @@ impl Node {
     
     // TODO: check this type
     pub fn root<I: IntoIterator>(children: I) -> Self{
-	    parent: None,
-	    children: children.into_iter().collect()
+        parent: None,
+        children: children.into_iter().collect()
     }
 }
 ```
