@@ -1,12 +1,12 @@
 ---
 title: A GUI experiment 
 author: Wakunguma Kalimukwa
-synopsis: Today we'll go over interesting nightly rust features
+synopsis: A GUI experiment
 layout: ../../layouts/BlogLayout.astro
 published: 2025-12-12
 preview: false
-image: /internal/thumbnails/rust-nightly-features.png
-imageAsset: ../assets/internal/thumbnails/rust-nightly-features.png
+image: /internal/thumbnails/a-gui-experiment.png
+imageAsset: ../assets/internal/thumbnails/a-gui-experiment.png
 imageSize: 5723169
 tags:
   - GUI

@@ -5,6 +5,7 @@ export const prerender = true;
 
 // TODO:
 // - Actually check the image size and type
+// - Test this
 export async function GET(){
     const posts = await getPosts();
 
