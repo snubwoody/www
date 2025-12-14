@@ -152,15 +152,15 @@ impl Widget for Button{
 }
 ```
 
-This has different trade offs but worked surprisingly well, and took me quite far.
+This has different trade offs but worked surprisingly well.
 
 ## Widget architecture
 
-Widgets have a lot of functionality, tab focus, focus states, layout, rendering, themes, when describing widgets you don't really want or need to handle all these things yourself.
+Widgets have a lot of functionality, tab focus, gesture states, layout, rendering, themes, and so on, when describing widgets you don't really want or need to handle all these things yourself. So creating an API were people only manage what they need was important to me.
 
 ### Domain specific language
 
-One approach is to use macros to create a [Domain Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language) for describing widgets.
+One approach is to use macros to create a [Domain Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language) for describing widgets using proc macros.
 
 ```rust
 use agape::widgets::*;
@@ -175,11 +175,9 @@ fn SubscribeButton() -> impl Widget{
 }
 ```
 
-But the problem is that rust macros don't have great IDE support, especially procedural macros.
-Because procedural macros simply take in and return a stream of rust tokens, i.e. `TokenStream`, there isn't a defined syntax that IDE's can use for intellisense; It's a black box.
+Rust macros don't have great IDE support, especially procedural macros. Because procedural macros simply take in and return a stream of rust tokens, i.e. `TokenStream`, there isn't a defined syntax that IDE's can use for intellisense; It's a black box.
 
-Also macros tend to have bad documentation, more than other rust items. You essentially have a mini-programming language,
-but people tend to not put in as much effort into documenting this new language. So you end up with a worse subset of rust.
+Also macros tend to have bad documentation, more than other rust items. You essentially have a mini-programming language, but people tend to not put in as much effort into documenting this new language. So, practically, you end up with a worse subset of rust.
 
 They also increase compile times.
 
@@ -282,15 +280,13 @@ impl View for Counter {
 
 It was quite hard to sync the trees, I also didn't really have a clear distinction of what a `View` is and what a `Widget` is, apart from one being higher level than the other. So it wasn't always clear what should be implemented where.
 
-Although I think of all the architectures I tried this would be the best.
-
 ## Events
 
 Because of the elm architecture I didn't experience this much, but I thought it would be important to note...
 
-Graphical applications are driven by events: do `this` when the user presses that button. In most frameworks/languages this is implemented as a simple function, so you can do whatever you would like.
+Graphical applications are driven by events: do 'this' when the user presses that button. In most frameworks/languages this is implemented as a simple function, so you can do whatever you would like.
 
-**HTML**:
+**Svelte**:
 
 ```html
 <button onclick={()=>console.log("Subscribed")}>Subscribe</button>
