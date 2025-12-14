@@ -27,23 +27,6 @@ I think every language needs a decent GUI library whether or not it will be **th
 
 First things first you need a 2D renderer to draw widgets to the screen. I initially made my own (crappy) [renderer](https://github.com/snubwoody/agape-rs/blob/4f27977abc8af6ea8a329e74f82c4ab4e6d90728/helium_renderer/src/lib.rs) using `wgpu`. This worked but it was kept breaking every other day, and I soon realised that it is a project in itself so I switched to `tiny_skia`, which worked great, although it didn't have font rendering. For font rendering, I used `cosmic_text` to render the text to an image and then render that image to the screen in `tiny_skia`.
 
-## Layout
-
-When designing the layout engine I looked at dozens of websites, trying to find a common pattern between them. I realised that most of the layout in a graphical user interface is composed of rows, columns and individual widgets.
-
-**TODO:** Use writing section
-
-Like this section:
-
-![Layout](../assets/internal/gui-in-rust/screenshot.png)
-
-Furthermore, all widgets want to be one of three sizes:
-
-- `Flex`: As large as possible
-- `Shrink`: As small as possible
-- `Fixed`: A specific fixed size
-
-By not using fixed sizes you allow the layout to be responsive and adapt to different screen sizes.
 
 ## Retained mode vs Immediate mode
 
