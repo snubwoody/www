@@ -34,16 +34,19 @@ First things first you need a 2D renderer to draw widgets to the screen. I initi
 
 ## Layout
 
-I realised that most of the layout in a GUI is composed of rows, columns and individual widgets (add image).
-Like this home page of [mason and fifth](https://mason-fifth.com/).
+When designing the layout engine I looked at dozens of websites trying to find a common pattern between them. I realised that most of the layout in a graphical user interface is composed of rows, columns and individual widgets (add image).
+
+**TODO:** Use writing section
+
+Like this section:
 
 ![Layout](../assets/internal/gui-in-rust/screenshot.png)
 
 Furthermore, all widgets want to be one of three sizes:
 
-- As large as possible
-- As small as possible
-- A specific fixed size
+- `Flex`: As large as possible
+- `Shrink`: As small as possible
+- `Fixed`: A specific fixed size
 
 By not using fixed sizes you allow the layout to be responsive and adapt to different screen sizes.
 
@@ -89,7 +92,6 @@ There's different pros and cons to each. I chose retained mode because it's:
 
 - Easier to manage global state, e.g. tab index
 - Easier to add accessibility
-- Typically less verbose
 
 ## Widget tree
 
@@ -97,7 +99,7 @@ In most, if not all, GUI libraries the widgets are stored in a tree, with each w
 
 ![Widget tree](../assets/internal/gui-in-rust/widget-tree.png)
 
-Rust is based on ownership, so writing a tree data stucture that has bidirectional data flow is difficuly. One approach is using reference counting and interior mutability.
+Rust is based on ownership, so writing a tree data stucture which shared ownership is difficuly. One approach is using reference counting and interior mutability.
 
 **TODO:** Check this IntoIterator
 
@@ -126,7 +128,7 @@ impl Node {
 }
 ```
 
-Apart from being quite unergonomic, I feel like this would severely limit the library's architecture down the line. So I chose to implement a top-down approach instead: data only flows down. So every widget can own its child, playing nice with rust's ownership model.
+Apart from being quite unergonomic, I feel like this would severely limit the library's architecture down the line. I chose, instead, to implement a top-down approach: data only flows down. So every widget can own its child, playing nice with rust's ownership model.
 
 ```rust
 pub trait Widget {
