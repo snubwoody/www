@@ -89,8 +89,6 @@ There's different pros and cons to each. I chose retained mode because it's puts
 
 Most, if not all, GUI libraries are composed of a widget tree, with each widget node potentially having one or more child widgets. Rust is based on ownership, so writing a tree data stucture which shared ownership is difficuly. One approach is using reference counting and interior mutability.
 
-**TODO:** Check this IntoIterator
-
 ```rust
 use std::cell::RefCell;
 use std::rc::{Rc, Weak};
@@ -206,8 +204,6 @@ impl SubscribeButton {
 ```
 
 ### Elm architecture
-
-[Point in time](https://github.com/snubwoody/agape-rs/tree/eaeb0950472b3ad022cee3a89abe3cf9fcfff85d)
 
 Finally I settled on the [elm architecture](https://guide.elm-lang.org/architecture/), which is broken into three parts:
 
@@ -423,14 +419,4 @@ impl View for DeleteAccount{
 }
 ```
 
-The async function will not do any work unless we `.await` it. This forces you into trying to fit a runtime somewhere in this, which gets ugly really fast. Some options (which I didn't try) are:
-
-- Add an `AsyncView` trait
-- Add a runtime in the view context
-- Add a global runtime
-
-I contemplated making the whole library async.
-
-## Resources
-
-- [Yew PR](https://github.com/yewstack/yew/pull/2972)
+The async function will not do any work unless we `.await` it. This forces you into trying to fit a runtime somewhere in this, which gets ugly really fast.
