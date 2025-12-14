@@ -12,16 +12,11 @@ tags:
   - GUI
 ---
 
-A while ago I went on an adventure creating my own GUI library in rust...
-
-## Ideas
-
-- Immediate mode vs retained mode
-- No macros
+A while ago I went on an adventure creating my own [GUI library](https://github.com/snubwoody/agape-rs) in rust...
 
 ## Why rust?
 
-Well I just like rust so that's one. Two, I'm not sure if rust will ever be the primary choice for writing graphical software, other languages are just simpler to learn and (may) have an easier developer experience. 
+Well I just like rust so that's one. Two, I'm not sure if rust will ever be the primary choice for writing graphical software, other languages are just simpler to learn and (may) have an easier developer experience.
 
 I think every language needs a decent GUI library whether or not it will be **the** primary language. There are just situations where you need to draw stuff to the screen, like game engines, embedded software and so on. But there's definitely use cases for a GUI in rust. Maybe you're making an OS in rust (link redox), you definitely need to draw stuff to the screen.
 
@@ -34,7 +29,7 @@ First things first you need a 2D renderer to draw widgets to the screen. I initi
 
 ## Layout
 
-When designing the layout engine I looked at dozens of websites trying to find a common pattern between them. I realised that most of the layout in a graphical user interface is composed of rows, columns and individual widgets (add image).
+When designing the layout engine I looked at dozens of websites, trying to find a common pattern between them. I realised that most of the layout in a graphical user interface is composed of rows, columns and individual widgets.
 
 **TODO:** Use writing section
 
@@ -52,7 +47,7 @@ By not using fixed sizes you allow the layout to be responsive and adapt to diff
 
 ## Retained mode vs Immediate mode
 
-In a [retained mode](https://en.wikipedia.org/wiki/Retained_mode) GUI the framework/library **retains** the widget tree for rendering and the client uses abstractions such as widgets, views or components to describe the scene. Retained mode UI's are **very** abstracted and there is a lot of stuff going on behind the scenes, like in this Jetpack Compose [example](https://developer.android.com/develop/ui/compose/state):
+In a [retained mode](https://en.wikipedia.org/wiki/Retained_mode) GUI the framework/library **retains** the underlying widget tree used for rendering and the client uses abstractions such as widgets/views/components to describe the scene. Retained mode UI's are **very** abstracted and there is a lot of stuff going on behind the scenes, like in this Jetpack Compose [example](https://developer.android.com/develop/ui/compose/state):
 
 ```kotlin
 @Composable
@@ -88,18 +83,11 @@ ui.label(format!("Hello '{name}', age {age}"));
 ui.image(egui::include_image!("ferris.png"));
 ```
 
-There's different pros and cons to each. I chose retained mode because it's:
-
-- Easier to manage global state, e.g. tab index
-- Easier to add accessibility
+There's different pros and cons to each. I chose retained mode because it's puts less in the hands of the user.
 
 ## Widget tree
 
-In most, if not all, GUI libraries the widgets are stored in a tree, with each widget potentially having one or more child widgets.
-
-![Widget tree](../assets/internal/gui-in-rust/widget-tree.png)
-
-Rust is based on ownership, so writing a tree data stucture which shared ownership is difficuly. One approach is using reference counting and interior mutability.
+Most, if not all, GUI libraries are composed of a widget tree, with each widget node potentially having one or more child widgets. Rust is based on ownership, so writing a tree data stucture which shared ownership is difficuly. One approach is using reference counting and interior mutability.
 
 **TODO:** Check this IntoIterator
 
@@ -107,25 +95,34 @@ Rust is based on ownership, so writing a tree data stucture which shared ownersh
 use std::cell::RefCell;
 use std::rc::{Rc, Weak};
 
+#[derive(Default)]
 pub struct Node {
     parent: Option<Weak<RefCell<Node>>>,
     children: Vec<Rc<RefCell<Node>>>,
 }
 
 impl Node {
-    fn new<I: IntoIterator>(parent: Weak<RefCell<Node>>,children:I) -> Self {
-        Node {
-            parent,
-            children: children.into_iter().collect(),
-        }
+    pub fn new() -> Self {
+        Self::default()
     }
-    
-    // TODO: check this type
-    pub fn root<I: IntoIterator>(children: I) -> Self{
-        parent: None,
-        children: children.into_iter().collect()
+
+    pub fn with_parent(mut self, parent: Weak<RefCell<Node>>) -> Self {
+        self.parent = Some(parent);
+        self
+    }
+
+    pub fn push(&mut self, child: Rc<RefCell<Node>>) {
+        self.children.push(child);
     }
 }
+
+let root = Rc::new(RefCell::new(Node::new()));
+let node = Rc::new(RefCell::new(
+    Node::new()
+        .with_parent(Rc::downgrade(&root)),
+));
+
+root.borrow_mut().push(node);
 ```
 
 Apart from being quite unergonomic, I feel like this would severely limit the library's architecture down the line. I chose, instead, to implement a top-down approach: data only flows down. So every widget can own its child, playing nice with rust's ownership model.
