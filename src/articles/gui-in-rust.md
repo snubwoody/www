@@ -3,7 +3,7 @@ title: A GUI experiment
 author: Wakunguma Kalimukwa
 synopsis: A GUI experiment
 layout: ../../layouts/BlogLayout.astro
-published: 2025-12-12
+published: 2025-12-15
 preview: false
 image: /internal/thumbnails/a-gui-experiment.png
 imageAsset: ../assets/internal/thumbnails/a-gui-experiment.png
@@ -30,15 +30,14 @@ I think every language needs a decent GUI library whether or not it will be **th
 
 ## Renderer
 
-Can't write widgets without something to draw them to the screen. I initially made my own (crappy) renderer using `wgpu`. This worked but it was buggy and slow and I soon realised that it is a project in itself so I switched to `tiny_skia`.  Font rendering...
+First things first you need a 2D renderer to draw widgets to the screen. I initially made my own (crappy) [renderer](https://github.com/snubwoody/agape-rs/blob/4f27977abc8af6ea8a329e74f82c4ab4e6d90728/helium_renderer/src/lib.rs) using `wgpu`. This worked but it was kept breaking every other day, and I soon realised that it is a project in itself so I switched to `tiny_skia`, which worked great, although it didn't have font rendering. For font rendering, I used `cosmic_text` to render the text to an image and then render that image to the screen in `tiny_skia`.
 
 ## Layout
 
-I realised that most of the layout in a GUI is composed of rows, columns and individual widgets (add image). 
+I realised that most of the layout in a GUI is composed of rows, columns and individual widgets (add image).
 Like this home page of [mason and fifth](https://mason-fifth.com/).
 
 ![Layout](../assets/internal/gui-in-rust/screenshot.png)
-
 
 Furthermore, all widgets want to be one of three sizes:
 
@@ -283,14 +282,13 @@ It was quite hard to sync the trees, I also didn't really have a clear distincti
 
 Although I think of all the architectures I tried this would be the best.
 
-
 ## Events
 
 Because of the elm architecture I didn't experience this much, but I thought it would be important to note...
 
 Graphical applications are driven by events: do `this` when the user presses that button. In most frameworks/languages this is implemented as a simple function, so you can do whatever you would like.
 
-**HTML**: 
+**HTML**:
 
 ```html
 <button onclick={()=>console.log("Subscribed")}>Subscribe</button>
@@ -370,12 +368,9 @@ struct Button<W: Widget>{
 
 This works fairly well, although it means that your types won't be clonable.
 
-
 ## Async
 
 I didn't get to this part but I was always wondering how async would be handled. GUI's are inherently async and you might to write async code, such as HTTP requests. The key problem here is how rust's async functions work: they are lazy.
-
->Exactly, IMHO at least, JS doesn't suffer from the coloring problem because you can call async functions from sync functions (because the JS Promise machinery allows to fall back to completion callbacks instead of using await). It's the 'virality' of await which causes the coloring problem, but in JS you can freely mix await and completion callbacks for async operations).
 
 In Javascript and Dart you can call an async function from a sync function and it will run in the background.
 
@@ -412,24 +407,24 @@ class DeleteAccount extends StatelessWidget{
 }
 ```
 
-Even though we don't `await` the functions they still run in the background and for most purposes that's enough. In rust however, async functions are lazy, which means we must call `.await` to do any work on them. This means you can't have something like:
+Even though we don't `await` the functions they still run in the background and for most purposes that's enough. It's similar to this in other languages. In rust, however, async functions are lazy, which means we must call `.await` to do any work on them. This means you can't have something like:
 
 ```rust
 use agape::{widgets::*};
 
 async fn delete_user(user_id: &str) {
-	...
+    ...
 }
 
 struct DeleteAccount;
 
 impl View for DeleteAccount{
-	type Widget = Button<Text>;
-	
-	fn view(&self) -> Self::Widget {
-		Button::text("Delete account")
-			.on_click(|| delete_user("..."))
-	}
+    type Widget = Button<Text>;
+
+    fn view(&self) -> Self::Widget {
+        Button::text("Delete account")
+            .on_click(|| delete_user("..."))
+    }
 }
 ```
 

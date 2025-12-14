@@ -1,6 +1,7 @@
 import {defineCollection,z} from "astro:content";
 import {glob} from "astro/loaders";
 
+// TODO: get the image based on the id
 const articles = defineCollection({
     loader: glob({pattern:"**/*.md",base:"./src/articles"}),
     schema: ({image}) => z.object({
