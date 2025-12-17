@@ -386,7 +386,7 @@ impl View for DeleteAccountBtn {
 
 ### Async
 
-I didn't get to this part but I was always wondering how async would be handled. GUI's are inherently async and you might to write async code, such as HTTP requests. The key problem here is how rust's async functions work: they are lazy.
+I didn't get to this part but I was always wondering how async would be handled. GUI's are inherently async and you may need to write async code, such as HTTP requests. The key problem here is how rust's async functions work: they are lazy.
 
 In Javascript and Dart you can call an async function from a sync function and it will run in the background.
 
@@ -444,4 +444,4 @@ impl View for DeleteAccount{
 }
 ```
 
-The async function will not do any work unless we `.await` it. This forces you into trying to fit a runtime somewhere in this, which gets ugly really fast.
+The async function will not do any work unless we `.await` it. This forces you into trying to fit a runtime somewhere in this.
