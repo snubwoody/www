@@ -372,7 +372,6 @@ impl View for DeleteAccountBtn {
 
     fn update(&mut self, msg: &mut MessageQueue) {
         if msg.has::<DeleteAccoutn>() {
-            self.count += 1;
             delete_account(&self.account_id);
         }
     }
