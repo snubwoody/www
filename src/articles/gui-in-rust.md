@@ -12,21 +12,11 @@ tags:
   - GUI
 ---
 
-A while ago I went on an adventure creating my own [GUI library](https://github.com/snubwoody/agape-rs) in rust...
-
-## Why rust?
-
-Well I just like rust so that's one. Two, I'm not sure if rust will ever be the primary choice for writing graphical software, other languages are just simpler to learn and (may) have an easier developer experience.
-
-I think every language needs a decent GUI library whether or not it will be **the** primary language. There are just situations where you need to draw stuff to the screen, like game engines, embedded software and so on. But there's definitely use cases for a GUI in rust. Maybe you're making an OS in rust (link redox), you definitely need to draw stuff to the screen.
-
-- Blender uses a custom solution using OpenGL
-- Davinci Resolve is written in QT
+A while ago I went on an adventure creating my own [GUI library](https://github.com/snubwoody/agape-rs) in rust and this is how it went:
 
 ## Renderer
 
 First things first you need a 2D renderer to draw widgets to the screen. I initially made my own (crappy) [renderer](https://github.com/snubwoody/agape-rs/blob/4f27977abc8af6ea8a329e74f82c4ab4e6d90728/helium_renderer/src/lib.rs) using `wgpu`. This worked but it was kept breaking every other day, and I soon realised that it is a project in itself so I switched to `tiny_skia`, which worked great, although it didn't have font rendering. For font rendering, I used `cosmic_text` to render the text to an image and then render that image to the screen in `tiny_skia`.
-
 
 ## Retained mode vs Immediate mode
 
@@ -70,7 +60,7 @@ There's different pros and cons to each. I chose retained mode because it's puts
 
 ## Widget tree
 
-Most, if not all, GUI libraries are composed of a widget tree, with each widget node potentially having one or more child widgets. Rust is based on ownership, so writing a tree data stucture which shared ownership is difficuly. One approach is using reference counting and interior mutability.
+Most, if not all, GUI libraries are composed of a widget tree, with each widget node potentially having one or more child widgets. Rust is based on ownership, so writing a tree data stucture which shared ownership is difficuly. One approach is to use reference counting and interior mutability.
 
 ```rust
 use std::cell::RefCell;
@@ -109,21 +99,24 @@ root.borrow_mut().push(node);
 Apart from being quite unergonomic, I feel like this would severely limit the library's architecture down the line. I chose, instead, to implement a top-down approach: data only flows down. So every widget can own its child, playing nice with rust's ownership model.
 
 ```rust
+use agape_layout::Layout;
+use agape_renderer::Renderer;
+
 pub trait Widget {
-    fn children(&self) -> &[&dyn Widget];
-    fn render(&self,renderer: &Renderer);
+    fn render(&self, renderer: &mut Renderer);
+    fn children(&self) -> Vec<&dyn Widget>;
 }
 
-struct Button{
+pub struct Button{
     child: Box<dyn Widget>
 }
 
 impl Widget for Button{
-    pub fn children(&self) -> &[&dyn Widget]{
-        std::slice::from(&self.child);
+    pub fn children(&self) -> Vec<&dyn Widget>{
+        vec![&self.child]
     }
 
-    fn render(&self, renderer: &Renderer){
+    fn render(&self, renderer: &mut Renderer){
         renderer.draw_rect(...);
         child.render(&renderer);
     }
