@@ -3,7 +3,7 @@ title: A GUI experiment
 author: Wakunguma Kalimukwa
 synopsis: A GUI experiment
 layout: ../../layouts/BlogLayout.astro
-published: 2025-12-15
+published: 2025-12-17
 preview: false
 image: /internal/thumbnails/a-gui-experiment.png
 imageAsset: ../assets/internal/thumbnails/a-gui-experiment.png
@@ -251,8 +251,6 @@ It was quite hard to sync the trees, I also didn't really have a clear distincti
 
 ## Events
 
-Because of the elm architecture I didn't experience this much, but I thought it would be important to note...
-
 Graphical applications are driven by events: do 'this' when the user presses that button. In most frameworks/languages this is implemented as a simple function, so you can do whatever you would like.
 
 **Svelte**:
@@ -268,26 +266,39 @@ class DeleteAccount extends StatelessWidget{
     final String accountId;
     const DeleteAccount({super.key, required this.accountId});
 
+    Future<void> deleteAccount() async {
+        // ...
+    }
+
     @override
     Widget build(BuildContext context) {
-        return ElevatedButton {
-            onClick: () => deleteAccount(accountId)
-            child: Text("Delete account")   
-        }
+        return ElevatedButton (
+            onPressed: deleteAccount,
+            child: Text("Delete account"),
+        )
     }
 }
 ```
 
-**Jetpack compose:**
+**SwiftUI:**
 
-```kotlin
-@Composable
-fun DeleteAccount() {
-    // TODO: check this
-    Button(onClick = { print("") }) {
-        Text("Delete account")
+```swift
+struct DeleteAccount: View {
+    let accountId: String
+
+    func deleteAccount() async {
+        // ...
+    }
+
+    var body: some View {
+        Button("Delete account") {
+            Task {
+                await deleteAccount()
+            }
+        }
     }
 }
+
 ```
 
 So my idea was to implement the same thing in rust, using closures:
@@ -335,7 +346,45 @@ struct Button<W: Widget>{
 
 This works fairly well, although it means that your types won't be clonable.
 
-## Async
+This is why the [elm architecture](#elm-architecture) was so useful it allows us to play nicely with rust's ownership rules.
+
+```rust
+use agape::state::Context;
+use agape::widgets::{Button, View, *};
+use agape::{App, MessageQueue, hstack};
+use auth::delete_account;
+
+fn main() -> agape::Result<()> {
+    App::new(Counter::default()).run()
+}
+
+#[derive(Debug)]
+struct DeleteAccount;
+
+
+#[derive(Default)]
+struct DeleteAccountBtn {
+    account_id: String
+}
+
+impl View for DeleteAccountBtn {
+    type Widget = Button<Text>;
+
+    fn update(&mut self, msg: &mut MessageQueue) {
+        if msg.has::<DeleteAccoutn>() {
+            self.count += 1;
+            delete_account(&self.account_id);
+        }
+    }
+
+    fn view(&self, _: &mut Context) -> Self::Widget {
+        Button::text("Delete Account")
+            .on_click(|msg| msg.add(DeleteAccount)),
+    }
+}
+```
+
+### Async
 
 I didn't get to this part but I was always wondering how async would be handled. GUI's are inherently async and you might to write async code, such as HTTP requests. The key problem here is how rust's async functions work: they are lazy.
 

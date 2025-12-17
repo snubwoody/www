@@ -46,7 +46,7 @@ const image = post.data.image;
     </Fragment>
     <main class="md:px-64 flex justify-center scroll-smooth">
         <div class="space-y-36 md:py-40 w-full">
-            <img src={image} alt="" class="aspect-[16/9] w-full object-cover">
+            <img src={image} alt="" class="aspect-video w-full object-cover">
             <header class="flex flex-col items-center">
                 <h1 class="text-center max-md:text-h3">{post.data.title}</h1>
                 <p class="mt-8">{formatDate(post.data.published.toString())}</p>
