@@ -1,29 +1,38 @@
 import rss from "@astrojs/rss";
 import { getPosts } from "../lib";
+import fs from "node:fs/promises";
 
 export const prerender = true;
 
-// TODO:
-// - Actually check the image size and type
 export async function GET(){
-    const posts = await getPosts();
+    const items = [];
+    for await (const item of rssItems()){
+        items.push(item);
+    }
 
     return rss({
         title: "Waku's blog",
         description: "My personal blog",
         site: "https://wakunguma.com",
-        items: posts.map(post => {
-            return ({
-                title: post.data.title,
-                description: post.data.synopsis,
-                pubDate: new Date(post.data.published),
-                link: `https://wakunguma.com/blog/${post.id}`,
-                enclosure:{
-                    url: `https://wakunguma.com${post.data.image}`,
-                    length: post.data.imageSize,
-                    type: "image/png"
-                }
-            });
-        })
+        items
     });
 }
+
+async function* rssItems(){
+    const posts = await getPosts();
+
+    for (const post of posts){
+        const image = await fs.readFile(`./public${post.data.image}`,{encoding:"binary"});
+        yield {
+            title: post.data.title,
+            description: post.data.synopsis,
+            pubDate: new Date(post.data.published),
+            link: `https://wakunguma.com/blog/${post.id}`,
+            enclosure:{
+                url: `https://wakunguma.com${post.data.image}`,
+                length: image.length,
+                type: "image/png"
+            }
+        };
+    }
+};
