@@ -4,8 +4,6 @@ import fs from "node:fs/promises";
 
 export const prerender = true;
 
-// TODO:
-// - Actually check the image size and type
 export async function GET(){
     const items = [];
     for await (const item of rssItems()){
