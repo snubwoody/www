@@ -8,7 +8,6 @@ export async function GET(){
     const items = [];
     for await (const item of rssItems()){
         items.push(item);
-        console.log(item);
     }
 
     return rss({
