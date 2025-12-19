@@ -3,7 +3,6 @@ preview: false
 title: Variadic generics
 author: Wakunguma Kalimukwa
 synopsis: ""
-layout: ../../layouts/BlogLayout.astro
 image: /internal/thumbnails/variadic-generics.png
 imageAsset: ../assets/internal/thumbnails/variadic-generics.png
 imageSize: 0

@@ -3,7 +3,6 @@ preview: false
 title: Branching strategies
 author: Wakunguma Kalimukwa
 synopsis: What's the most optimal branching strategy?
-layout: ../../layouts/BlogLayout.astro
 image: /internal/thumbnails/branching-strategies.png
 imageAsset: ../assets/internal/thumbnails/branching-strategies.png
 imageSize: 5723169

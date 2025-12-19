@@ -2,7 +2,6 @@
 title: The perfect error
 preview: true
 author: Wakunguma Kalimukwa
-layout: ../../layouts/BlogLayout.astro
 synopsis: If debugging is the process of removing software bugs then programming must be the process of putting them in
 image: /internal/thumbnails/rust-nightly-features.png
 imageAsset: ../assets/internal/thumbnails/rust-nightly-features.png

@@ -2,7 +2,6 @@
 title: How everything became a Web App
 author: Wakunguma Kalimukwa
 published: 2025-06-23
-layout: ../../layouts/BlogLayout.astro
 image: /internal/thumbnails/rust-weird-expressions.png
 imageAsset: ../assets/internal/thumbnails/rust-weird-expressions.png
 imageSize: 1200000
