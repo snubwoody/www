@@ -2,7 +2,6 @@
 title: A guide to hosting rust
 preview: false
 author: Wakunguma Kalimukwa
-layout: ../../layouts/BlogLayout.astro
 synopsis: Dozens of services, only one app
 image: /internal/thumbnails/hosting-rust.png
 imageAsset: ../assets/internal/thumbnails/hosting-rust.png
