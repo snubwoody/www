@@ -1,13 +1,12 @@
 // @ts-check
 /* global process */
 import { defineConfig } from "astro/config";
-import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import node from "@astrojs/node";
 import vercel from "@astrojs/vercel";
-import {readingTime} from "./src/plugins/reading-time.ts";
+import remarkReadingTime from "./reading-time.mjs";
 
 export default defineConfig({
     site: "https://wakunguma.com",
@@ -20,11 +19,10 @@ export default defineConfig({
                 dark: "everforest-dark"
             }
         },
-        remarkPlugins: [readingTime]
+        remarkPlugins: [remarkReadingTime]
     },
     integrations: [
         svelte(),
-        mdx(),
         sitemap()
     ],
     vite: {

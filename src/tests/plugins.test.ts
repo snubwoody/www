@@ -1,5 +1,5 @@
 import {test,expect} from "vitest";
-import {calculateReadingTime, splitWords} from "../plugins/reading-time.ts";
+import {calculateReadingTime, splitWords} from "../plugins/reading-time.mjs";
 
 test("Split words", () => {
     const words = splitWords("Three frogs flew through France\nThen died in a car crash");
