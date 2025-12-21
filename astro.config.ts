@@ -7,6 +7,7 @@ import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import node from "@astrojs/node";
 import vercel from "@astrojs/vercel";
+import {readingTime} from "./src/plugins/reading-time.ts";
 
 export default defineConfig({
     site: "https://wakunguma.com",
@@ -18,7 +19,8 @@ export default defineConfig({
                 light: "everforest-light",
                 dark: "everforest-dark"
             }
-        }
+        },
+        remarkPlugins: [readingTime]
     },
     integrations: [
         svelte(),
@@ -30,6 +32,7 @@ export default defineConfig({
             tailwindcss()
         ]
     },
+
     adapter: !(process.env.VERCEL_ENV === "production" || process.env.VERCEL_ENV === "preview") ? node({
         mode: "standalone"
     }) : vercel()
