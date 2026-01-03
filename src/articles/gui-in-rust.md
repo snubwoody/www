@@ -3,7 +3,7 @@ title: A GUI experiment
 author: Wakunguma Kalimukwa
 synopsis: A GUI experiment
 layout: ../../layouts/BlogLayout.astro
-published: 2025-12-17
+published: 2026-01-03
 preview: false
 image: /internal/thumbnails/a-gui-experiment.png
 imageAsset: ../assets/internal/thumbnails/a-gui-experiment.png
