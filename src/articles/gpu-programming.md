@@ -3,7 +3,6 @@ title: GPU programming is so hard
 preview: true
 author: Wakunguma Kalimukwa
 synopsis: What's the most optimal branching strategy?
-layout: ../../layouts/BlogLayout.astro
 image: /internal/thumbnails/branching-strategies.png
 imageAsset: ../assets/internal/thumbnails/branching-strategies.png
 imageSize: 5723169

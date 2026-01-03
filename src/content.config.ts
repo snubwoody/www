@@ -7,7 +7,6 @@ const articles = defineCollection({
     schema: ({image}) => z.object({
         title: z.string(),
         author: z.string(),
-        layout: z.string(),
         published: z.date(),
         image: z.string(),
         imageAsset: image(),

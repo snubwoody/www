@@ -2,7 +2,6 @@
 title: Maybe don't roll your own auth
 preview: true
 author: Wakunguma Kalimukwa
-layout: ../../layouts/BlogLayout.astro
 synopsis: Don't roll your own auth
 image: /internal/thumbnails/roll-your-own-auth.png
 imageAsset: ../assets/internal/thumbnails/roll-your-own-auth.png

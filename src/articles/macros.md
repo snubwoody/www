@@ -2,7 +2,6 @@
 title: Why are macros like that?
 preview: false
 author: Wakunguma Kalimukwa
-layout: ../../layouts/BlogLayout.astro
 synopsis: Macros are weird
 image: /internal/thumbnails/macros.png
 imageAsset: ../assets/internal/thumbnails/macros.png

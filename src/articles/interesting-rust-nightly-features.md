@@ -2,7 +2,6 @@
 title: Rust nightly features you should watch out for
 author: Wakunguma Kalimukwa
 synopsis: Today we'll go over interesting nightly rust features
-layout: ../../layouts/BlogLayout.astro
 published: 2025-05-12
 preview: false
 image: /internal/thumbnails/rust-nightly-features.png
