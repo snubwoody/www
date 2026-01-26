@@ -3,10 +3,10 @@ preview: false
 title: The horrible landscape of desktop app development
 author: Wakunguma Kalimukwa
 synopsis: ""
-image: /internal/thumbnails/macros.png
-imageAsset: ../assets/internal/thumbnails/macros.png
+image: /internal/thumbnails/desktop-apps.png
+imageAsset: ../assets/internal/thumbnails/desktop-apps.png
 imageSize: 0
-published: 2026-01-26
+published: 2026-01-25
 tags:
   - GUI
 ---
