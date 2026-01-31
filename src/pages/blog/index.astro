@@ -1,18 +1,10 @@
 ---
 import Layout from "../../layouts/BaseLayout.astro";
-import {getCollection} from "astro:content";
 import ArticleList from "../../components/blog/ArticleList.astro";
 import {getPosts} from "../../lib";
-// TODO: use getPosts function
-// let articles = await getCollection("articles",(post) => {
-//     return post.data.preview !== true;
-// });
 
 const articles = await getPosts({sort: true});
-// articles = articles.sort((a,b) => a.data.published.getTime() - b.data.published.getTime());
 const latestPosts = articles.slice(0,5);
-
-// const a = getPosts({sort: true});
 ---
 
 <Layout title="Browse articles">

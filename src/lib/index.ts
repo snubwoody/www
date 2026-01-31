@@ -19,7 +19,6 @@ export const getPosts = async (params?: GetPostsParams): Promise<CollectionEntry
 
     if (sort){
         articles = articles.sort((a,b) => a.data.published.getTime() - b.data.published.getTime()).reverse();
-        console.log("Sorting");
     }
 
     return articles;
