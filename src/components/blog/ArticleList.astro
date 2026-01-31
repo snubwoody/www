@@ -57,7 +57,7 @@ if (activeFilter === "All") {
             )}
         </ul>
     </header>
-    <ul class="space-y-24">
+    <ul class="article-grid">
         {filteredPosts.map(post =>
             <li>
                 <a href={`/blog/${post.id}`} class="blog-post" data-astro-prefetch>
@@ -82,6 +82,12 @@ if (activeFilter === "All") {
 </section>
 
 <style>
+    .article-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
+        gap: 24px;
+    }
+
     .filter-chip{
         display: flex;
         align-items: start;
