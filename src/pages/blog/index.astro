@@ -1,13 +1,9 @@
 ---
 import Layout from "../../layouts/BaseLayout.astro";
-import {getCollection} from "astro:content";
 import ArticleList from "../../components/blog/ArticleList.astro";
-// TODO: use getPosts function
-let articles = await getCollection("articles",(post) => {
-    return post.data.preview !== true;
-});
+import {getPosts} from "../../lib";
 
-articles = articles.sort((a,b) => a.data.published.getTime() - b.data.published.getTime());
+const articles = await getPosts({sort: true});
 const latestPosts = articles.slice(0,5);
 ---
 
@@ -18,7 +14,7 @@ const latestPosts = articles.slice(0,5);
     <main class="border-t border-border-neutral">
         <aside class="border-r border-border-neutral divide-y divide-border-neutral max-w-[25rem] max-md:hidden">
             <div class="p-24 space-y-8">
-                <h6>Latest posts</h6>
+                <h6>Latest articles</h6>
                 <ul aria-label="Latest posts list" class="space-y-8">
                     {latestPosts.map(post =>
                         <li>
