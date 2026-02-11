@@ -1,9 +1,8 @@
 <script lang="ts">
     import Input from "./Input.svelte";
-    import {Rss,Check,ArrowRight} from "@lucide/svelte/icons";
+    import {ArrowRight} from "@lucide/svelte/icons";
 
     let loading = $state(false);
-    let success = $state(false);
     let failed = $state(false);
     let email: null | string = $state(null);
     let errorMessage = $state("Something went wrong");
@@ -22,14 +21,14 @@
             });
 
             if (response.ok){
-                success = true;   
+                // success = true;
                 setTimeout(() => {
-                    success = false;
+                    // success = false;
                     email = "";
                 },2500);         
                 return;
             }
-            const body = await response.json();
+            // const body = await response.json();
             // errorMessage = body.details ?? "Something went wrong";
             // TODO: match based on error code
             errorMessage = "Something went wrong";
