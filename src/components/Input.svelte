@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { HTMLInputAttributes } from "svelte/elements";
-    type Props = {} & HTMLInputAttributes;
+    interface Props extends HTMLInputAttributes{}
 
     let {
         value = $bindable(),
@@ -16,19 +16,15 @@
 <style>
     input{
         width: 100%;
-        padding: 12px 16px;
-        border-radius: var(--radius-md);
+        padding: 12px;
+        border-bottom: 2px solid var(--color-border-strong);
 
         &::placeholder{
             color: var(--color-text-muted);
         }
-      
-        :global([data-theme="light"]) &{
-            border: 1px solid var(--color-border-neutral);
-        }
 
-        :global([data-theme="dark"]) &{
-            background: var(--color-surface-neutral-rest);
+        &:focus{
+            outline: none;
         }
     }
 </style>
