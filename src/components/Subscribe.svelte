@@ -1,6 +1,6 @@
 <script lang="ts">
     import Input from "./Input.svelte";
-    import {Rss,Check} from "@lucide/svelte/icons";
+    import {Rss,Check,ArrowRight} from "@lucide/svelte/icons";
 
     let loading = $state(false);
     let success = $state(false);
@@ -9,6 +9,7 @@
     let errorMessage = $state("Something went wrong");
 
     const subscribe = async () => {
+        // TODO: mock this
         try{
             loading = true;
             const url = "/api/subscribe";
@@ -29,7 +30,9 @@
                 return;
             }
             const body = await response.json();
-            errorMessage = body.details ?? "Something went wrong";
+            // errorMessage = body.details ?? "Something went wrong";
+            // TODO: match based on error code
+            errorMessage = "Something went wrong";
             failed = true;
             setTimeout(() => {
                 failed = false;
@@ -44,62 +47,46 @@
         }
         
     };
+    // TODO: make this a form
 </script>
 
-<div class="flex flex-col max-sm:items-center flex-1 max-w-[450px]">
-    <h6 class="mb-4">Subscribe</h6>
-    <p class="mb-24">Get notified when a new post goes live.</p>
-    <div class="flex max-sm:flex-col max-sm:w-full items-start gap-24">
+<div class="flex flex-col max-sm:items-center flex-1 max-w-[400px]">
+    <h5 class="mb-4">Join my newsletter</h5>
+    <div class="flex max-sm:flex-col max-sm:w-full items-center gap-24">
         <div class="w-full">
+            <!--TODO: add error message to input component--->
+            <!--FIXME: layout shift--->
             <Input bind:value={email} type="email" placeholder="Email"/>
             {#if failed}
                 <p class="mt-8">{errorMessage}</p>
             {/if}
         </div>
-        <div class="flex items-center gap-8 w-full">
-            <button 
-                class="btn btn-purple flex-1 w-fit"
-                onclick={subscribe}
-            >
-                {#if success}
-                    Subscribed
-                    <Check size='16'/>
-                {:else}
-                    Subscribe
-                {/if}
-                {#if loading}
-                    <div class="spinner"></div>
-                {/if}
+        {#if loading}
+            <div class="spinner"></div>
+        {:else}
+            <button onclick={subscribe}>
+                <ArrowRight size='24'/>
             </button>
-            <a aria-label="RSS Feed" href="/rss.xml" class="icon-btn btn-transparent">
-                <Rss/>
-            </a>
-        </div>
+        {/if}
     </div>
 </div>
 
 
 <style>
-    footer{
-        padding: 44px 64px;
-        display: flex;
-        gap: 32px;
-        border-top: 1px solid var(--color-border-neutral);
-        justify-content: space-between;
-        
-        @media (width < 40rem){
-            padding: 20px;
-            align-items: center;
-            flex-direction: column;
-        }
-    }
     .spinner {
-		border: 2px solid transparent;
-		border-top: 2px solid white;
+		border: 2px solid var(--color-neutral-900);
+        border-bottom-color: transparent;
 		border-radius: 50%;
-		width: 16px;
-		height: 16px;
+		width: 24px;
+		height: 24px;
+        flex-shrink: 0;
 		animation: spin 0.5s linear infinite;
+
+        :global([data-theme="dark"] &) {
+            border-color: var(--color-neutral-100);
+            border-bottom-color: transparent;
+        }
+
 	}
 
 	@keyframes spin {
