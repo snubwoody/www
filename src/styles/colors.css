@@ -88,6 +88,7 @@
 	--color-text-brand-hover: var(--color-brand-600);
 	--color-text-on-brand: var(--color-white);
     
+	--color-border-strong: var(--color-neutral-900);
 	--color-border-neutral: var(--color-neutral-200);
     --color-border-brand: var(--color-brand-700);
     
@@ -102,6 +103,7 @@
 	--color-surface-neutral-hover: var(--color-neutral-800);
 	--color-surface-neutral-pressed: var(--color-neutral-700);
 
+    --color-border-strong: var(--color-neutral-100);
     --color-border-neutral: var(--color-neutral-700);
     --color-border-brand: var(--color-brand-400);
 	
