@@ -1,12 +1,12 @@
 // @ts-check
 /* global process */
 import { defineConfig } from "astro/config";
-import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import node from "@astrojs/node";
 import vercel from "@astrojs/vercel";
+import remarkReadingTime from "./reading-time.mjs";
 
 export default defineConfig({
     site: "https://wakunguma.com",
@@ -18,11 +18,11 @@ export default defineConfig({
                 light: "everforest-light",
                 dark: "everforest-dark"
             }
-        }
+        },
+        remarkPlugins: [remarkReadingTime]
     },
     integrations: [
         svelte(),
-        mdx(),
         sitemap()
     ],
     vite: {
@@ -30,6 +30,7 @@ export default defineConfig({
             tailwindcss()
         ]
     },
+
     adapter: !(process.env.VERCEL_ENV === "production" || process.env.VERCEL_ENV === "preview") ? node({
         mode: "standalone"
     }) : vercel()
