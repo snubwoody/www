@@ -1,0 +1,20 @@
+---
+
+interface Props{
+    headings: MarkdownHeading[]
+}
+const {headings}:Props = Astro.props;
+
+---
+
+<aside aria-label="Content Summary" class="max-lg:hidden h-full space-y-16 sticky top-32">
+    <h6>On this page</h6>
+    <ul>
+        {headings.map(heading => (
+            <li style={{ "--depth": `${heading.depth - 2}` }} class="heading-link">
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+        )
+        )}
+    </ul>
+</aside>
