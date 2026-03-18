@@ -38,7 +38,7 @@ if (activeFilter === "All") {
 ---
 
 
-<section class="p-24 md:px-40 md:py-44 space-y-36">
+<section class="p-20 md:px-40 md:py-44 space-y-36">
     <header class="space-y-12">
         <h3>Articles</h3>
         <ul class="flex gap-12 items-center flex-wrap">
@@ -63,9 +63,9 @@ if (activeFilter === "All") {
                 <a href={`/blog/${post.id}`} class="blog-post" data-astro-prefetch>
                     <Picture
                         widths={[360,720,1280,post.data.imageAsset.width]}
-                        sizes={`(max-width: 360px) 360px, (max-width: 720px) 720px, (max-width: 1280px) 1280px (max-width: 1600px) ${post.data.imageAsset}px`}
+                        sizes={`(max-width: 360px) 360px, (max-width: 720px) 720px, (max-width: 1280px) 1280px, (max-width: 1600px) ${post.data.imageAsset.width}px`}
                         src={post.data.imageAsset}
-                        formats={["webp","avif","jpg"]}
+                        formats={["webp","jpg"]}
                         alt=""
                         class="rounded-md"
                     />
@@ -83,8 +83,9 @@ if (activeFilter === "All") {
 
 <style>
     .article-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: repeat(auto-fill, min(minmax(550px, 1fr),1fr));
         gap: 24px;
     }
 
