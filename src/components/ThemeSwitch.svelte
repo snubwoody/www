@@ -1,47 +1,60 @@
 <script lang='ts'>
     import {Sun,Moon} from "@lucide/svelte/icons";
-    import {type Theme} from "../lib/theme";
-
-    const switchTheme = async (theme:Theme) => {
-        localStorage.setItem("theme",JSON.stringify(theme));
+    
+    const toggleTheme = () => {
         const element = document.querySelector("html");
+        const currentTheme = element?.getAttribute("data-theme");
+        const theme = currentTheme === "light" ? "dark" : "light";
         element?.setAttribute("data-theme",theme);
     };
 </script>
 
-<div class="flex items-center gap-16">
-    <button
-        onclick={() => switchTheme("light")}
-        aria-label="Toggle light mode"
-        class='light:hidden'
-    >
+<button onclick={toggleTheme} aria-label="Toggle theme">
+    <div class="sun">
         <Sun size='20' class='relative z-50'/>
-    </button>
-    <button
-        onclick={() => switchTheme("dark")}
-        aria-label="Toggle dark mode"
-        class='dark:hidden'
-    >
-        <Moon size='20' strokeWidth='2.25' class='relative z-50 text-black'/>
-    </button>
-    <a href="https://github.com/snubwoody" aria-label="Github profile" class="github-link"></a>
-</div>
+    </div>
+    <div class="moon">
+        <Moon size='20' strokeWidth='2.25' class='relative z-50'/>
+    </div>
+</button>
+
 
 <style>
-	.github-link{
-		width: 24px;
-		aspect-ratio: 1.02 / 1;
-		background-size: cover;
-        background-image: url('/external/icons/github-mark.svg');
+	button{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+		padding: 4px;
+		border-radius: calc(infinity * 1px);
+        background: var(--color-neutral-25);
+        border: 1px solid var(--color-neutral-50);
 
-
-        :global([data-theme="dark"]) & {
-            background-image: url('/external/icons/github-mark-white.svg');
+        
+        :global([data-theme="dark"]) &{
+            background: var(--color-neutral-900);
+            border-color: var(--color-neutral-800);
         }
 	}
 
-	button{
-		padding: 8px;
-		border-radius: inherit;
-	}
+    .sun, .moon {
+        padding: 4px;
+    }
+
+    .sun{
+        background: var(--color-neutral-50);
+		border-radius: calc(infinity * 1px);
+
+        :global([data-theme="dark"]) &{
+            background: transparent;
+        }
+    }
+    
+    .moon{
+        /* background: var(--color-neutral-900); */
+		border-radius: calc(infinity * 1px);
+
+        :global([data-theme="dark"]) &{
+            background: var(--color-neutral-800);
+        }
+    }
 </style>

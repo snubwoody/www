@@ -1,34 +1,14 @@
-<script lang='ts'>
-    import {Sun,Moon} from "@lucide/svelte/icons";
-    import {type Theme} from "../lib/theme";
+---
+import ThemeSwitch from "./ThemeSwitch.svelte";
+---
 
-    const switchTheme = async (theme:Theme) => {
-        localStorage.setItem("theme",JSON.stringify(theme));
-        const element = document.querySelector("html");
-        element?.setAttribute("data-theme",theme);
-    };
-    // TODO: make this static
-</script>
 <nav class='w-full bg-page flex p-20 items-center justify-between border-b border-border-neutral'>
     <div class="flex items-center gap-20">
         <a href="/" aria-label="Home" class="home-link"></a>
         <a href="/blog" class="btn-underline">Blog</a>
     </div>
 	<div class="flex items-center gap-16">
-        <button
-            onclick={() => switchTheme("light")}
-            aria-label="Toggle light mode"
-            class='light:hidden'
-        >
-            <Sun size='20' class='relative z-50'/>
-        </button>
-        <button
-            onclick={() => switchTheme("dark")}
-            aria-label="Toggle dark mode"
-            class='dark:hidden'
-        >
-            <Moon size='20' strokeWidth='2.25' class='relative z-50 text-black'/>
-        </button>
+        <ThemeSwitch client:load/>
 		<a href="https://github.com/snubwoody" aria-label="Github profile" class="github-link"></a>
 	</div>
 </nav>
