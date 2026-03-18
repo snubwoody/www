@@ -1,0 +1,43 @@
+---
+import ThemeSwitch from "./ThemeSwitch.svelte";
+---
+
+<nav class='w-full bg-page flex p-20 items-center justify-between border-b border-border-neutral'>
+    <div class="flex items-center gap-20">
+        <a href="/" aria-label="Home" class="home-link"></a>
+        <a href="/blog" class="btn-underline">Blog</a>
+    </div>
+    <div class="flex items-center gap-16">
+        <ThemeSwitch client:load/>
+        <a href="https://github.com/snubwoody" aria-label="Github profile" class="github-link"></a>
+    </div>
+</nav>
+
+<style>
+    .home-link{
+        width: 32px;
+        aspect-ratio: 1.5 / 1;
+        background-size: cover;
+        background-image: url('/internal/logo-black.svg');
+        :global([data-theme="dark"]) & {
+            background-image: url('/internal/logo-white.svg');
+        }
+    }
+
+	.github-link{
+		width: 24px;
+		aspect-ratio: 1.02 / 1;
+		background-size: cover;
+        background-image: url('/external/icons/github-mark.svg');
+
+
+        :global([data-theme="dark"]) & {
+            background-image: url('/external/icons/github-mark-white.svg');
+        }
+	}
+
+	button{
+		padding: 8px;
+		border-radius: inherit;
+	}
+</style>
