@@ -11,10 +11,10 @@
 
 <button onclick={toggleTheme} aria-label="Toggle theme">
     <div class="sun">
-        <Sun size='20' class='relative z-50'/>
+        <Sun size='20' fill="currentColor"  class='relative z-50' aria-hidden="true"/>
     </div>
     <div class="moon">
-        <Moon size='20' strokeWidth='2.25' class='relative z-50'/>
+        <Moon size='20' fill="currentColor" strokeWidth='2.25' class='relative z-50' aria-hidden="true"/>
     </div>
 </button>
 
@@ -36,25 +36,16 @@
         }
 	}
 
-    .sun, .moon {
+    /* .sun, .moon {
         padding: 4px;
+        border-radius: calc(infinity * 1px);
     }
 
-    .sun{
+    :global([data-theme="light"]) .sun{
         background: var(--color-neutral-50);
-		border-radius: calc(infinity * 1px);
-
-        :global([data-theme="dark"]) &{
-            background: transparent;
-        }
     }
     
-    .moon{
-        /* background: var(--color-neutral-900); */
-		border-radius: calc(infinity * 1px);
-
-        :global([data-theme="dark"]) &{
-            background: var(--color-neutral-800);
-        }
-    }
+    :global([data-theme="dark"]) .moon{
+        background: var(--color-neutral-800);
+    } */
 </style>
