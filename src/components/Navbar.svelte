@@ -7,6 +7,7 @@
         const element = document.querySelector("html");
         element?.setAttribute("data-theme",theme);
     };
+    // TODO: make this static
 </script>
 <nav class='w-full bg-page flex p-20 items-center justify-between border-b border-border-neutral'>
     <div class="flex items-center gap-20">
