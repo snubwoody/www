@@ -6,17 +6,14 @@
         const currentTheme = element?.getAttribute("data-theme");
         const theme = currentTheme === "light" ? "dark" : "light";
         element?.setAttribute("data-theme",theme);
+        localStorage.setItem("theme",JSON.stringify(theme));
     };
 </script>
 
 <button onclick={toggleTheme} aria-label="Toggle theme">
     <div class="background"></div>
-    <div class="sun">
-        <Sun size='20' fill="currentColor"  class='relative z-50' aria-hidden="true"/>
-    </div>
-    <div class="moon">
-        <Moon size='20' fill="currentColor" strokeWidth='2.25' class='relative z-50' aria-hidden="true"/>
-    </div>
+    <Sun size='20' fill="currentColor"  class='relative z-50' aria-hidden="true"/>
+    <Moon size='20' fill="currentColor" strokeWidth='2.25' class='relative z-50' aria-hidden="true"/>
 </button>
 
 
@@ -38,6 +35,7 @@
 	}
 
     .background{
+        content: "";
         position: absolute;
         top: 4px;
         left: 4px;

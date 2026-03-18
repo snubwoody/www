@@ -8,7 +8,7 @@ test("Default data-theme attribute", async({page}) => {
 
 test("Toggle dark mode", async ({ page }) => {
     await page.goto("http://localhost:4321");
-    await page.getByLabel("Toggle dark mode").click();
+    await page.getByLabel("Toggle theme").click();
     const theme = await page.evaluate(() => {
         return JSON.parse(localStorage.getItem("theme")!);
     });
@@ -19,8 +19,8 @@ test("Toggle dark mode", async ({ page }) => {
 
 test("Toggle light mode", async ({ page }) => {
     await page.goto("http://localhost:4321");
-    await page.getByLabel("Toggle dark mode").click();
-    await page.getByLabel("Toggle light mode").click();
+    await page.getByLabel("Toggle theme").click();
+    await page.getByLabel("Toggle theme").click();
     const theme = await page.evaluate(() => {
         return JSON.parse(localStorage.getItem("theme")!);
     });

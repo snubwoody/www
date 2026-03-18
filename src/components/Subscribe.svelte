@@ -49,12 +49,11 @@
     // TODO: make this a form
 </script>
 
-<div class="flex flex-col max-sm:items-center flex-1 max-w-[400px]">
+<div class="flex flex-col max-sm:items-center flex-1 max-w-400">
     <h5 class="mb-4">Join my newsletter</h5>
-    <div class="flex max-sm:flex-col max-sm:w-full items-center gap-24">
+    <div class="flex max-sm:w-full items-center gap-24">
         <div class="w-full">
             <!--TODO: add error message to input component--->
-            <!--FIXME: layout shift--->
             <Input bind:value={email} type="email" placeholder="Email"/>
             {#if failed}
                 <p class="mt-8">{errorMessage}</p>
