@@ -10,6 +10,7 @@
 </script>
 
 <button onclick={toggleTheme} aria-label="Toggle theme">
+    <div class="background"></div>
     <div class="sun">
         <Sun size='20' fill="currentColor"  class='relative z-50' aria-hidden="true"/>
     </div>
@@ -23,12 +24,12 @@
 	button{
         display: flex;
         align-items: center;
-        gap: 4px;
-		padding: 4px;
+        position: relative;
+        gap: 8px;
+		padding: 8px;
 		border-radius: calc(infinity * 1px);
         background: var(--color-neutral-25);
         border: 1px solid var(--color-neutral-50);
-
         
         :global([data-theme="dark"]) &{
             background: var(--color-neutral-900);
@@ -36,16 +37,22 @@
         }
 	}
 
-    /* .sun, .moon {
-        padding: 4px;
+    .background{
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: calc(20px + 8px);
+        aspect-ratio: 1/1;
         border-radius: calc(infinity * 1px);
-    }
+        background-color: var(--color-neutral-50);
+        transition: all 200ms;
+        transition: transform 250ms,
+                background-color 200ms;
 
-    :global([data-theme="light"]) .sun{
-        background: var(--color-neutral-50);
+        
+        :global([data-theme="dark"]) &{
+            transform: translateX(calc(20px + 8px));
+            background-color: var(--color-neutral-800);
+        } 
     }
-    
-    :global([data-theme="dark"]) .moon{
-        background: var(--color-neutral-800);
-    } */
 </style>
