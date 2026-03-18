@@ -5,6 +5,7 @@ import { formatDate } from "../../../lib/format";
 import {getEntry,getCollection,render} from "astro:content";
 import Share from "../../../components/blog/Share.astro";
 import SimilarArticles from "../../../components/blog/SimilarArticles.astro";
+import TableOfContent from "@components/blog/TableOfContent.astro";
 
 const {article} = Astro.params;
 export const getStaticPaths = async() => {
@@ -59,7 +60,8 @@ const image = post.data.image;
                     <Share postId={post.id}/>
                     <SimilarArticles/>
                 </div>
-                <aside aria-label="Content Summary" class="max-lg:hidden h-full space-y-16 sticky top-32">
+                <TableOfContent {headings}/>
+                <!-- <aside aria-label="Content Summary" class="max-lg:hidden h-full space-y-16 sticky top-32">
                     <h6>On this page</h6>
                     <ul>
                         {headings.map(heading => (
@@ -69,7 +71,7 @@ const image = post.data.image;
                         )
                         )}
                     </ul>
-                </aside>
+                </aside> -->
             </div>
         </div>
     </main>

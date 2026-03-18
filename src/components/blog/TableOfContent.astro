@@ -1,20 +1,60 @@
 ---
-
+import {type MarkdownHeading} from "astro";
 interface Props{
     headings: MarkdownHeading[]
 }
 const {headings}:Props = Astro.props;
 
+// TODO: rename this
+function isLeft(index: number){
+    const current = headings[index];
+    const next = headings[index+1];
+
+    if (!current || !next){
+        return false;
+    }
+
+    
+    
+    if (current.depth >= next.depth){
+        return false;
+    }
+
+    return true;
+}
 ---
 
 <aside aria-label="Content Summary" class="max-lg:hidden h-full space-y-16 sticky top-32">
     <h6>On this page</h6>
     <ul>
-        {headings.map(heading => (
+        {headings.map((heading,index) => (
             <li style={{ "--depth": `${heading.depth - 2}` }} class="heading-link">
                 <a href={`#${heading.slug}`}>{heading.text}</a>
+                {isLeft(index) && 
+                    <svg class="connector" width="16" height="16" viewBox="0 0 16 16">
+                        <line x1="0" y1="0" x2="10" y2="12" stroke="#000" stroke-width="1"></line>
+                    </svg>
+                }
             </li>
-        )
-        )}
+        ))}
     </ul>
 </aside>
+
+<style>
+    .heading-link{
+        padding: 8px 16px;
+        margin-left: calc(16px * var(--depth));
+        border-left: 2px solid color-mix(in oklch, black 5%,transparent);
+        position: relative;
+        [data-theme="dark"] & {
+            border-color: color-mix(in oklch, white 5%,transparent)
+        }
+    }
+
+    .connector{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        /* background-color: color-mix(in oklch,black 5%,transparent); */ 
+    }
+</style>
