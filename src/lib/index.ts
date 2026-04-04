@@ -1,5 +1,7 @@
 import {type CollectionEntry, getCollection} from "astro:content";
 
+export type SortOption = "title" | "date_created";
+
 export interface GetPostsParams {
     /**
      * Sort the list in descending order
@@ -22,5 +24,18 @@ export const getPosts = async (params?: GetPostsParams): Promise<CollectionEntry
     }
 
     return articles;
+};
+
+export const sortPosts = (posts: CollectionEntry<"articles">[],opt: SortOption = "title"): CollectionEntry<"articles">[] => {
+    let sorted = posts;
+    switch (opt){
+        case "title":
+            sorted = posts.toSorted((a,b) => a.data.title.localeCompare(b.data.title));
+            break;
+        case "date_created":
+            sorted = posts.toSorted((a,b) => a.data.published.getTime() - b.data.published.getTime()).reverse();
+            break;
+    }
+    return sorted;
 };
 
