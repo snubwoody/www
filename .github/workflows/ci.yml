@@ -43,8 +43,11 @@ jobs:
         id: playwright-cache
         with:
           path: /Users/runner/Library/Caches/ms-playwright
-          key: playwright-cache-${{runner.os}}
-          restore-keys: playwright-cache-
+          key: playwright-cache-${{runner.os}}-${{hashFiles('/playwright.config.ts')}}-${{hashFiles('/package.json')}}
+          restore-keys: |
+            playwright-cache-${{runner.os}}-${{hashFiles('/playwright.config.ts')}}-
+            playwright-cache-${{runner.os}}-
+            playwright-cache-
       - run: pnpm install
       - run: pnpm exec playwright install --with-deps
         if: ${{steps.playwright-cache.ouput.cache-hit != 'true'}}
