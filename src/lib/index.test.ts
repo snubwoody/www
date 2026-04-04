@@ -6,7 +6,6 @@ describe("Sort posts", () => {
         const posts = sortPosts(await getPosts(),"title");
         for (const [index,post] of posts.entries()) {
             if (index === posts.length - 1) continue;
-            console.log(`Title 1: ${post.data.title}, Title 2: ${posts[index+1].data.title}`);
             expect(post.data.title < posts[index+1].data.title).toBe(true);
         }
     });
