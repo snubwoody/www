@@ -5,6 +5,7 @@ import {getPosts} from "../../lib";
 
 const articles = await getPosts({sort: true});
 const latestPosts = articles.slice(0,5);
+export const prerender = false;
 ---
 
 <Layout title="Browse articles">
