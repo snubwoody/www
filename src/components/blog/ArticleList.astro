@@ -28,7 +28,6 @@ posts.forEach(post => {
     }
 });
 
-console.log(Astro.url.searchParams)
 const sortBy: SortOption = (Astro.url.searchParams.get("sort_by") as SortOption | null)  ?? "date_created";
 // const activeFilter = Astro.url.searchParams.get("filter") ?? "All";
 // let filteredPosts:CollectionEntry<"articles">[];
@@ -40,7 +39,6 @@ const sortBy: SortOption = (Astro.url.searchParams.get("sort_by") as SortOption 
 // }
 
 posts = sortPosts(posts,sortBy);
-console.log(sortBy);
 // TODO: get url and append
 ---
 

@@ -35,6 +35,10 @@
         border-radius: var(--radius-md);
         transition: all 200ms ease-in-out;
 
+        :global(&[data-state="open"]), &:focus{
+            color: var(--color-purple-500);
+        }
+
         &:hover{
             background: var(--color-neutral-25);
         }
