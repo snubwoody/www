@@ -1,22 +1,40 @@
 <script lang="ts">
-    import DropdownMenu from "@components/DropdownMenu.svelte";
+    import Dropdown from "@components/Dropdown.svelte";
+    import {DropdownMenu} from "bits-ui";
+    import type {SortOption} from "../../lib";
     // TODO: close on click
+
+    interface Props{
+        sortOption: SortOption
+    }
+
+    const {sortOption}:Props = $props();
+    // TODO: focus color
 </script>
 
-<DropdownMenu>
+<Dropdown>
     {#snippet trigger()}
-        Sort by: Date created
+        Sort by:
+        {#if sortOption === "title"}
+            Title
+        {:else if sortOption === "date_created"}
+            Date created
+        {/if}
     {/snippet}
     {#snippet children()}
         <ul class="space-y-8">
-            <li class="menu-item" data-selected="true">Date created</li>
-            <li class="menu-item" data-selected="false">Title</li>
+            <DropdownMenu.Item class="menu-item" data-selected={sortOption === "date_created"}>
+                <a href="/blog?sort_by=date_created">Date created</a>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item class="menu-item" data-selected={sortOption === "title"}>
+                <a href="/blog?sort_by=title">Title</a>
+            </DropdownMenu.Item>
         </ul>
     {/snippet}
-</DropdownMenu>
+</Dropdown>
 
 <style>
-    .menu-item{
+    :global(.menu-item){
         padding: 8px;
         transition: all 250ms ease-in-out;
         border-radius: var(--radius-sm);
@@ -30,5 +48,4 @@
             color: var(--color-purple-700);
         }
     }
-
 </style>

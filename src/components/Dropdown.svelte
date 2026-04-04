@@ -6,13 +6,15 @@
     interface Props{
         trigger: Snippet,
         children: Snippet,
+
     }
 
     const {trigger,children}:Props = $props();
     // TODO: animate content
+    let open = $state(false);
 </script>
 
-<DropdownMenu.Root>
+<DropdownMenu.Root bind:open>
     <DropdownMenu.Trigger class="dropdown-trigger">
         {@render trigger()}
         <ChevronDown size="16"/>
@@ -47,7 +49,8 @@
         box-shadow: var(--shadow-md);
         padding: 8px;
         border-radius: var(--radius-md);
-        width: var(--bits-dropdown-menu-anchor-width);
+        min-width: var(--bits-dropdown-menu-anchor-width);
+        width: fit-content;
         border: 1px solid var(--color-neutral-50);
     }
 </style>
