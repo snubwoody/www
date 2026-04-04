@@ -2,12 +2,14 @@
 import { formatDate } from "../../lib/format";
 import {Picture} from "astro:assets";
 import type {CollectionEntry} from "astro:content";
+import SortButton from "./SortButton.svelte";
+import {type SortOption, sortPosts} from "../../lib";
 
 type Props = {
     posts: CollectionEntry<"articles">[]
 };
 
-const {posts}: Props = Astro.props;
+let {posts}: Props = Astro.props;
 
 const filters: Map<string,number> = new Map();
 filters.set("All",posts.length);
@@ -26,47 +28,36 @@ posts.forEach(post => {
     }
 });
 
+const sortBy: SortOption = (Astro.url.searchParams.get("sort_by") as SortOption | null)  ?? "date_created";
+// const activeFilter = Astro.url.searchParams.get("filter") ?? "All";
+// let filteredPosts:CollectionEntry<"articles">[];
+// if (activeFilter === "All") {
+//     filteredPosts = posts;
+// } else {
+//     filteredPosts = posts
+//         .filter(post => post.data.tags.includes(activeFilter));
+// }
 
-const activeFilter = Astro.url.searchParams.get("filter") ?? "All";
-let filteredPosts:CollectionEntry<"articles">[];
-if (activeFilter === "All") {
-    filteredPosts = posts;
-} else {
-    filteredPosts = posts
-        .filter(post => post.data.tags.includes(activeFilter));
-}
+posts = sortPosts(posts,sortBy);
+// TODO: get url and append
 ---
 
 
-<section class="p-24 md:px-40 md:py-44 space-y-36">
+<section class="p-20 md:px-40 md:py-44 space-y-36">
     <header class="space-y-12">
         <h3>Articles</h3>
-        <ul class="flex gap-12 items-center flex-wrap">
-            {Array.from(filters).map(([filter,count]) =>
-                <li>
-                    <a
-                    href=`/blog?filter=${filter}`
-                    data-selected={activeFilter === filter}
-                    class="filter-chip"
-                    >
-                        {filter}
-                        <span class="text-xs">{count}</span>
-                    </a>
-                </li>
-
-            )}
-        </ul>
+        <SortButton client:load sortOption={sortBy}/>
     </header>
-    <ul class="space-y-24">
-        {filteredPosts.map(post =>
+    <ul class="article-grid">
+        {posts.map(post =>
             <li>
                 <a href={`/blog/${post.id}`} class="blog-post" data-astro-prefetch>
                     <Picture
                         widths={[360,720,1280,post.data.imageAsset.width]}
-                        sizes={`(max-width: 360px) 360px, (max-width: 720px) 720px, (max-width: 1280px) 1280px (max-width: 1600px) ${post.data.imageAsset}px`}
+                        sizes={`(max-width: 360px) 360px, (max-width: 720px) 720px, (max-width: 1280px) 1280px, (max-width: 1600px) ${post.data.imageAsset.width}px`}
                         src={post.data.imageAsset}
-                        formats={["webp","avif","jpg"]}
-                        alt=""
+                        formats={["webp","jpg"]}
+                        alt={`${post.data.title} thumbnail`}
                         class="rounded-md"
                     />
                     <div class="grid place-items-center p-12">
@@ -82,6 +73,13 @@ if (activeFilter === "All") {
 </section>
 
 <style>
+    .article-grid {
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: repeat(auto-fill, min(minmax(550px, 1fr),1fr));
+        gap: 24px;
+    }
+
     .filter-chip{
         display: flex;
         align-items: start;

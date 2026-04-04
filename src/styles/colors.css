@@ -55,18 +55,18 @@
 	--color-orange-900: #372301;
 	--color-orange-950: #191001;
 	
-	--color-neutral-25: #fafafa;
-	--color-neutral-50: #F2F2F2;
-	--color-neutral-100: #E6E6E6;
-	--color-neutral-200: #CCCCCC;
-	--color-neutral-300: #B3B3B3;
-	--color-neutral-400: #999999;
-	--color-neutral-500: #808080;
-	--color-neutral-600: #666666;
-	--color-neutral-700: #4D4D4D;
-	--color-neutral-800: #333333;
-	--color-neutral-900: #1A1A1A;
-	--color-neutral-950: #0D0D0D;
+    --color-neutral-25:  hsl(0, 0%, 98%);
+    --color-neutral-50:  hsl(0, 0%, 95%);
+    --color-neutral-100: hsl(0, 0%, 90%);
+    --color-neutral-200: hsl(0, 0%, 80%);
+    --color-neutral-300: hsl(0, 0%, 70%);
+    --color-neutral-400: hsl(0, 0%, 60%);
+    --color-neutral-500: hsl(0, 0%, 50%);
+    --color-neutral-600: hsl(0, 0%, 40%);
+    --color-neutral-700: hsl(0, 0%, 30%);
+    --color-neutral-800: hsl(0, 0%, 20%);
+    --color-neutral-900: hsl(0, 0%, 10%);
+    --color-neutral-950: hsl(0, 0%, 5%);
 
     --color-light-green: #DBF7CF;
     --color-dark-green: #24590C;
@@ -88,6 +88,7 @@
 	--color-text-brand-hover: var(--color-brand-600);
 	--color-text-on-brand: var(--color-white);
     
+	--color-border-strong: var(--color-neutral-900);
 	--color-border-neutral: var(--color-neutral-200);
     --color-border-brand: var(--color-brand-700);
     
@@ -102,6 +103,7 @@
 	--color-surface-neutral-hover: var(--color-neutral-800);
 	--color-surface-neutral-pressed: var(--color-neutral-700);
 
+    --color-border-strong: var(--color-neutral-100);
     --color-border-neutral: var(--color-neutral-700);
     --color-border-brand: var(--color-brand-400);
 	

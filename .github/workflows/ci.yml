@@ -34,7 +34,7 @@ jobs:
         with:
           version: 10
       - name: Setup NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22.x
           cache: 'pnpm'
@@ -42,9 +42,12 @@ jobs:
         uses: actions/cache@v4
         id: playwright-cache
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-cache-${{runner.os}}
-          restore-keys: playwright-cache-
+          path: /Users/runner/Library/Caches/ms-playwright
+          key: playwright-cache-${{runner.os}}-${{hashFiles('/playwright.config.ts')}}-${{hashFiles('/package.json')}}
+          restore-keys: |
+            playwright-cache-${{runner.os}}-${{hashFiles('/playwright.config.ts')}}-
+            playwright-cache-${{runner.os}}-
+            playwright-cache-
       - run: pnpm install
       - run: pnpm exec playwright install --with-deps
         if: ${{steps.playwright-cache.ouput.cache-hit != 'true'}}
@@ -58,7 +61,7 @@ jobs:
         with:
           version: 10
       - name: Setup NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22.x
           cache: 'pnpm'
@@ -73,7 +76,7 @@ jobs:
         with:
           version: 10
       - name: Setup NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22.x
           cache: 'pnpm'
@@ -86,4 +89,3 @@ jobs:
       - uses: actions/checkout@v5
       - name: All systems go
         run: exit 0
-
