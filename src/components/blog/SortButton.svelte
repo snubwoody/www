@@ -21,7 +21,6 @@
             Date created
         {/if}
     {/snippet}
-    {#snippet children()}
         <ul class="space-y-8">
             <DropdownMenu.Item class="menu-item" data-selected={sortOption === "date_created"}>
                 <a href="/blog?sort_by=date_created">Date created</a>
@@ -30,7 +29,6 @@
                 <a href="/blog?sort_by=title">Title</a>
             </DropdownMenu.Item>
         </ul>
-    {/snippet}
 </Dropdown>
 
 <style>
