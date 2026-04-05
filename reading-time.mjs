@@ -7,8 +7,9 @@ import {toString} from "mdast-util-to-string";
 export const WORDS_PER_MINUTE = 200;
 
 export default function readingTime() {
-    throw  "Failed 1";
     return function (tree, file) {
+        console.log(tree,file);
+        console.log("Plugin");
         throw  "Failed 2";
         const textOnPage = toString(tree);
         console.log(textOnPage);
@@ -21,6 +22,7 @@ export default function readingTime() {
 /**
  *
  * Splits a string of text into an array of words.
+ *
  * @param {string}text
  * @returns {string[]} An array of words
  */
