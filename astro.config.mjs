@@ -1,12 +1,12 @@
 // @ts-check
 /* global process */
 import { defineConfig } from "astro/config";
-import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import node from "@astrojs/node";
 import vercel from "@astrojs/vercel";
+import wordCount from "./src/plugins/word-count.js";
 
 export default defineConfig({
     site: "https://wakunguma.com",
@@ -18,11 +18,11 @@ export default defineConfig({
                 light: "everforest-light",
                 dark: "everforest-dark"
             }
-        }
+        },
+        remarkPlugins: [wordCount]
     },
     integrations: [
         svelte(),
-        mdx(),
         sitemap()
     ],
     vite: {
