@@ -27,9 +27,8 @@ if (!post){
     return Astro.redirect("/404");
 }
 
-const {Content,headings,remarkPluginFrontmatter} = await render(post);
+const {Content,headings} = await render(post);
 const image = post.data.image;
-console.log(remarkPluginFrontmatter);
 // TODO: change size of content
 // Make table of content smaller
 // Make content bigger
