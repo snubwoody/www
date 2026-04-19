@@ -5,6 +5,7 @@ import { formatDate } from "../../../lib/format";
 import {getEntry,getCollection,render} from "astro:content";
 import Share from "../../../components/blog/Share.astro";
 import SimilarArticles from "../../../components/blog/SimilarArticles.astro";
+import { Calendar, Clock3, BookOpenText } from "@lucide/astro";
 
 const {article} = Astro.params;
 export const getStaticPaths = async() => {
@@ -19,6 +20,7 @@ export const getStaticPaths = async() => {
     });
 };
 
+// TODO: shouldn't I redirect to /blog
 if (!article){
     return Astro.redirect("/404");
 }
@@ -27,11 +29,18 @@ if (!post){
     return Astro.redirect("/404");
 }
 
-const {Content,headings} = await render(post);
+const {
+    Content,
+    headings,
+    remarkPluginFrontmatter: frontmatter
+} = await render(post);
+
 const image = post.data.image;
 // TODO: change size of content
+// TODO: use Astro image
 // Make table of content smaller
 // Make content bigger
+// TODO: test the metadata fields in playwright
 ---
 
 <BaseLayout title={post.data.title}>
@@ -44,13 +53,38 @@ const image = post.data.image;
         <meta name="twitter:card" content={"summary_large_image"}>
         <meta name="twitter:image" content={`https://www.wakunguma.com${image}`}>
     </Fragment>
-    <main class="md:px-64 flex justify-center scroll-smooth">
-        <div class="space-y-36 md:py-40 w-full">
-            <img src={image} alt="" class="aspect-[16/9] w-full object-cover">
-            <header class="flex flex-col items-center">
-                <h1 class="text-center max-md:text-h3">{post.data.title}</h1>
-                <p class="mt-8">{formatDate(post.data.published.toString())}</p>
+    <main class="flex flex-col justify-center items-center scroll-smooth">
+        <!--TODO: might not need wrapper div-->
+        <!--TODO: use image component-->
+        <!--TODO: add padding-->
+        <img src={image} alt="" class="thumbnail">
+        <div class="space-y-36 w-full max-w-1150">
+            <header>
+                <!-- TODO: link and animate -->
+                <h6 class="mb-8">Wakunguma Kalimukwa</h6>
+                <h1 class="max-md:text-h3 mb-20">{post.data.title}</h1>
+                <!-- TODO: use en-GB formatting -->
+                <!-- TODO: check on smaller screens -->
+                <!-- TODO: compare medium and normal -->
+                <!-- TODO: icon colour -->
+                <ul class="metadata">
+                    <li>
+                        <Calendar size='16'/>
+                        <p>{formatDate(post.data.published.toString())}</p>
+                    </li>
+                    <li class="w-2 h-full bg-neutral-50"></li>
+                    <li>
+                        <BookOpenText size='16'/>
+                        <p>{frontmatter.wordCount} words</p>
+                    </li>
+                    <li class="w-2 h-full bg-neutral-50"></li>
+                    <li>
+                        <Clock3 size='16'/>
+                        <p>{frontmatter.minutesToRead} minute read</p>
+                    </li>
+                </ul>
             </header>
+            <div class="w-full bg-purple-500 h-5"></div>
             <div class="flex px-24 md:px-64 gap-64 pb-64 justify-center">
                 <div class="space-y-40">
                     <article class="blog-content">
@@ -76,6 +110,31 @@ const image = post.data.image;
 </BaseLayout>
 
 <style>
+    .metadata{
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        li{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-text-neutral);
+        }
+    }
+
+    header{
+        display: flex;
+        flex-direction: column;
+        padding-top: 32px;
+    }
+
+    .thumbnail{
+        width: 100%;
+        object-fit: cover;
+        aspect-ratio: 21/9;
+    }
+
     .heading-link{
         padding: 8px 16px;
         margin-left: calc(16px * var(--depth));
