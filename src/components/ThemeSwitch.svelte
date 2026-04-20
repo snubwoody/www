@@ -1,13 +1,13 @@
 <script lang='ts'>
-    import {Sun,Moon} from "@lucide/svelte/icons";
-    
-    const toggleTheme = () => {
-        const element = document.querySelector("html");
-        const currentTheme = element?.getAttribute("data-theme");
-        const theme = currentTheme === "light" ? "dark" : "light";
-        element?.setAttribute("data-theme",theme);
-        localStorage.setItem("theme",JSON.stringify(theme));
-    };
+import { Sun, Moon } from "@lucide/svelte/icons";
+
+const toggleTheme = () => {
+    const element = document.querySelector("html");
+    const currentTheme = element?.getAttribute("data-theme");
+    const theme = currentTheme === "light" ? "dark" : "light";
+    element?.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", JSON.stringify(theme));
+};
 </script>
 
 <button onclick={toggleTheme} aria-label="Toggle theme">

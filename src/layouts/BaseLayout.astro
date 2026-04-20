@@ -5,15 +5,12 @@ import "../styles/app.css";
 import Analytics from "@vercel/analytics/astro";
 
 interface Props {
-    title?: string
-    description?: string,
-    imageUrl?:string
+    title?: string;
+    description?: string;
+    imageUrl?: string;
 }
 
-const {
-    title = "Wakunguma Kalimukwa",
-    description
-} = Astro.props;
+const { title = "Wakunguma Kalimukwa", description } = Astro.props;
 ---
 
 <!doctype html>

@@ -16,21 +16,21 @@ export default defineConfig({
         shikiConfig: {
             themes: {
                 light: "everforest-light",
-                dark: "everforest-dark"
-            }
+                dark: "everforest-dark",
+            },
         },
-        remarkPlugins: [wordCount]
+        remarkPlugins: [wordCount],
     },
-    integrations: [
-        svelte(),
-        sitemap()
-    ],
+    integrations: [svelte(), sitemap()],
     vite: {
-        plugins: [
-            tailwindcss()
-        ]
+        plugins: [tailwindcss()],
     },
-    adapter: !(process.env.VERCEL_ENV === "production" || process.env.VERCEL_ENV === "preview") ? node({
-        mode: "standalone"
-    }) : vercel()
+    adapter: !(
+        process.env.VERCEL_ENV === "production" ||
+        process.env.VERCEL_ENV === "preview"
+    )
+        ? node({
+              mode: "standalone",
+          })
+        : vercel(),
 });

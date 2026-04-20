@@ -4,9 +4,9 @@ import fs from "node:fs/promises";
 
 export const prerender = true;
 
-export async function GET(){
+export async function GET() {
     const items = [];
-    for await (const item of rssItems()){
+    for await (const item of rssItems()) {
         items.push(item);
     }
 
@@ -14,25 +14,27 @@ export async function GET(){
         title: "Waku's blog",
         description: "My personal blog",
         site: "https://wakunguma.com",
-        items
+        items,
     });
 }
 
-async function* rssItems(){
+async function* rssItems() {
     const posts = await getPosts();
 
-    for (const post of posts){
-        const image = await fs.readFile(`./public${post.data.image}`,{encoding:"binary"});
+    for (const post of posts) {
+        const image = await fs.readFile(`./public${post.data.image}`, {
+            encoding: "binary",
+        });
         yield {
             title: post.data.title,
             description: post.data.synopsis,
             pubDate: new Date(post.data.published),
             link: `https://wakunguma.com/blog/${post.id}`,
-            enclosure:{
+            enclosure: {
                 url: `https://wakunguma.com${post.data.image}`,
                 length: image.length,
-                type: "image/png"
-            }
+                type: "image/png",
+            },
         };
     }
-};
+}

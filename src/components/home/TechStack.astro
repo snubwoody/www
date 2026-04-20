@@ -9,40 +9,70 @@ import Pnpm from "../../assets/external/icons/pnpm-logo.svg";
 import Playwright from "../../assets/external/icons/playwright-logo.svg";
 import type { SvgComponent } from "astro/types";
 
-interface Section{
-    title: string,
-    technologies: Technology[]
+interface Section {
+    title: string;
+    technologies: Technology[];
 }
 
-interface Technology{
-    icon: SvgComponent,
-    iconDark: SvgComponent,
-    title: string
-    body: string
+interface Technology {
+    icon: SvgComponent;
+    iconDark: SvgComponent;
+    title: string;
+    body: string;
 }
 
 const sections: Section[] = [
     {
         title: "Website",
         technologies: [
-            {title: "Astro",body: "Frontend framework",icon: AstroDark,iconDark: AstroGradient},
-            {title: "Svelte",body: "Frontend framework",icon: Svelte,iconDark: Svelte},
-            {title: "Tailwind",body: "Styling",icon: Tailwind,iconDark: Tailwind}
-        ]
+            {
+                title: "Astro",
+                body: "Frontend framework",
+                icon: AstroDark,
+                iconDark: AstroGradient,
+            },
+            {
+                title: "Svelte",
+                body: "Frontend framework",
+                icon: Svelte,
+                iconDark: Svelte,
+            },
+            {
+                title: "Tailwind",
+                body: "Styling",
+                icon: Tailwind,
+                iconDark: Tailwind,
+            },
+        ],
     },
     {
         title: "Tooling",
         technologies: [
-            {title: "Pnpm",body: "Package manager",icon: Pnpm,iconDark: Pnpm},
-            {title: "Playwright",body: "End-to-end testing",icon: Playwright,iconDark: Playwright}
-        ]
+            {
+                title: "Pnpm",
+                body: "Package manager",
+                icon: Pnpm,
+                iconDark: Pnpm,
+            },
+            {
+                title: "Playwright",
+                body: "End-to-end testing",
+                icon: Playwright,
+                iconDark: Playwright,
+            },
+        ],
     },
     {
         title: "Networking",
         technologies: [
-            {title: "Vercel",body: "Hosting",icon: VercelLight,iconDark: VercelDark}
-        ]
-    }
+            {
+                title: "Vercel",
+                body: "Hosting",
+                icon: VercelLight,
+                iconDark: VercelDark,
+            },
+        ],
+    },
 ];
 ---
 

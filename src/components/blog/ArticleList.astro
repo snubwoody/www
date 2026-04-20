@@ -1,34 +1,36 @@
 ---
 import { formatDate } from "../../lib/format";
-import {Picture} from "astro:assets";
-import type {CollectionEntry} from "astro:content";
+import { Picture } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
 import SortButton from "./SortButton.svelte";
-import {type SortOption, sortPosts} from "../../lib";
+import { type SortOption, sortPosts } from "../../lib";
 
 type Props = {
-    posts: CollectionEntry<"articles">[]
+    posts: CollectionEntry<"articles">[];
 };
 
-let {posts}: Props = Astro.props;
+let { posts }: Props = Astro.props;
 
-const filters: Map<string,number> = new Map();
-filters.set("All",posts.length);
+const filters: Map<string, number> = new Map();
+filters.set("All", posts.length);
 
-posts.forEach(post => {
+posts.forEach((post) => {
     const tags = post.data.tags;
-    for (const tag of tags){
+    for (const tag of tags) {
         const count = filters.get(tag);
 
-        if (!count){
-            filters.set(tag,1);
+        if (!count) {
+            filters.set(tag, 1);
             continue;
         }
 
-        filters.set(tag,count+1);
+        filters.set(tag, count + 1);
     }
 });
 
-const sortBy: SortOption = (Astro.url.searchParams.get("sort_by") as SortOption | null)  ?? "date_created";
+const sortBy: SortOption =
+    (Astro.url.searchParams.get("sort_by") as SortOption | null) ??
+    "date_created";
 // const activeFilter = Astro.url.searchParams.get("filter") ?? "All";
 // let filteredPosts:CollectionEntry<"articles">[];
 // if (activeFilter === "All") {
@@ -38,7 +40,7 @@ const sortBy: SortOption = (Astro.url.searchParams.get("sort_by") as SortOption 
 //         .filter(post => post.data.tags.includes(activeFilter));
 // }
 
-posts = sortPosts(posts,sortBy);
+posts = sortPosts(posts, sortBy);
 // TODO: get url and append
 ---
 

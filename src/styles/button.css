@@ -1,6 +1,4 @@
-
-
-.btn{
+.btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,7 +9,7 @@
     transition: all 150ms;
 }
 
-.icon-btn{
+.icon-btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,84 +17,83 @@
     border-radius: var(--radius-sm);
 }
 
-.btn-primary{
+.btn-primary {
     color: var(--color-text-on-brand);
     background: var(--color-surface-brand-rest);
     transition: all 150ms;
-    
-    &:hover{
+
+    &:hover {
         background: var(--color-surface-brand-hover);
     }
-    
-    &:active{
+
+    &:active {
         background: var(--color-surface-brand-pressed);
     }
 }
 
-.btn-purple{
+.btn-purple {
     color: var(--color-purple-50);
     background: var(--color-purple-500);
     transition: all 150ms;
-    
-    &:hover{
+
+    &:hover {
         background: var(--color-purple-600);
     }
 
-    [data-theme="dark"] &{
+    [data-theme="dark"] & {
         background: var(--color-purple-100);
         color: var(--color-neutral-950);
     }
 
-    [data-theme="dark"] &:hover{
+    [data-theme="dark"] &:hover {
         background: var(--color-purple-50);
     }
 }
 
-.btn-light-green{
+.btn-light-green {
     color: var(--color-dark-green);
     background: var(--color-light-green);
     transition: all 150ms;
 
-    &:hover{
+    &:hover {
         background: var(--color-dark-green);
         color: var(--color-light-green);
     }
 }
 
-.btn-transparent{
+.btn-transparent {
     color: var(--color-text-body);
     transition: all 150ms;
-    
-    &:hover{
+
+    &:hover {
         background: var(--color-surface-neutral-hover);
     }
-    
-    &:active{
+
+    &:active {
         background: var(--color-surface-neutral-pressed);
     }
 }
 
-.btn-underline{
+.btn-underline {
     position: relative;
 
-    &::after{
+    &::after {
         position: absolute;
         bottom: -2px;
         left: 0;
-        content: '';
+        content: "";
         width: 0%;
         height: 1px;
         background: var(--color-white);
         transition: all 750ms;
-
     }
-    
-    [data-theme="light"] &::after{
+
+    [data-theme="light"] &::after {
         background: var(--color-black);
     }
-    
-    &:hover{
-        &::after{
+
+    &:hover {
+        &::after {
             width: 100%;
         }
     }
