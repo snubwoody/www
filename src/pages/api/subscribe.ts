@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { type Theme } from "../../lib/theme";
+import type { Theme } from "../../lib/theme";
 import { createSubscriber } from "../../lib/subscriber";
 
 export type SubscribeRequest = {

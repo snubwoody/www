@@ -1,4 +1,4 @@
-import { toString } from "mdast-util-to-string";
+import { toString as mdToString} from "mdast-util-to-string";
 
 /**
  * @typedef {import('mdast').Root} Root
@@ -13,8 +13,8 @@ export default function plugin() {
     /**
      * @param {import('mdast').Root} tree
      */
-    return function (tree, file) {
-        const words = splitWords(toString(tree));
+    return (tree, file) => {
+        const words = splitWords(mdToString(tree));
         const minutes = readingTime(words);
         file.data.astro.frontmatter.wordCount = words.length;
         file.data.astro.frontmatter.minutesToRead = minutes;
