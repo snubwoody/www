@@ -1,4 +1,4 @@
-import { toString as mdToString} from "mdast-util-to-string";
+import { toString as mdToString } from "mdast-util-to-string";
 
 /**
  * @typedef {import('mdast').Root} Root

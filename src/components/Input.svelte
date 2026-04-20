@@ -1,13 +1,13 @@
 <script lang="ts">
-import type { HTMLInputAttributes } from "svelte/elements";
+    import type { HTMLInputAttributes } from "svelte/elements";
 
-let {
-    value = $bindable(),
-    // eslint-disable-next-line prefer-const
-    placeholder,
-    // eslint-disable-next-line prefer-const
-    type = "text",
-}: HTMLInputAttributes = $props();
+    let {
+        value = $bindable(),
+        // eslint-disable-next-line prefer-const
+        placeholder,
+        // eslint-disable-next-line prefer-const
+        type = "text",
+    }: HTMLInputAttributes = $props();
 </script>
 
 <input {type} bind:value={value} {placeholder}>

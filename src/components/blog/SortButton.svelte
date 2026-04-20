@@ -1,15 +1,15 @@
 <script lang="ts">
-import Dropdown from "@components/Dropdown.svelte";
-import { DropdownMenu } from "bits-ui";
-import type { SortOption } from "../../lib";
-// TODO: close on click
+    import Dropdown from "@components/Dropdown.svelte";
+    import { DropdownMenu } from "bits-ui";
+    import type { SortOption } from "../../lib";
+    // TODO: close on click
 
-interface Props {
-    sortOption: SortOption;
-}
+    interface Props {
+        sortOption: SortOption;
+    }
 
-const { sortOption }: Props = $props();
-// TODO: focus color
+    const { sortOption }: Props = $props();
+    // TODO: focus color
 </script>
 
 <Dropdown>

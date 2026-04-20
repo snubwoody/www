@@ -1,8 +1,8 @@
 <script lang="ts">
-type Tab = "Folio" | "Cascada";
-let activeTab: Tab = $state("Folio");
+    type Tab = "Folio" | "Cascada";
+    let activeTab: Tab = $state("Folio");
 
-const selectTab = (tab: Tab) => (activeTab = tab);
+    const selectTab = (tab: Tab) => (activeTab = tab);
 </script>
 
 <section>

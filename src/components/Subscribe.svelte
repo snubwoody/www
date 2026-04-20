@@ -1,51 +1,51 @@
 <script lang="ts">
-import Input from "./Input.svelte";
-import { ArrowRight } from "@lucide/svelte/icons";
+    import Input from "./Input.svelte";
+    import { ArrowRight } from "@lucide/svelte/icons";
 
-let loading = $state(false);
-let failed = $state(false);
-let email: null | string = $state(null);
-let errorMessage = $state("Something went wrong");
+    let loading = $state(false);
+    let failed = $state(false);
+    let email: null | string = $state(null);
+    let errorMessage = $state("Something went wrong");
 
-const subscribe = async () => {
-    // TODO: mock this
-    try {
-        loading = true;
-        const url = "/api/subscribe";
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({ email }),
-        });
+    const subscribe = async () => {
+        // TODO: mock this
+        try {
+            loading = true;
+            const url = "/api/subscribe";
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            });
 
-        if (response.ok) {
-            // success = true;
+            if (response.ok) {
+                // success = true;
+                setTimeout(() => {
+                    // success = false;
+                    email = "";
+                }, 2500);
+                return;
+            }
+            // const body = await response.json();
+            // errorMessage = body.details ?? "Something went wrong";
+            // TODO: match based on error code
+            errorMessage = "Something went wrong";
+            failed = true;
             setTimeout(() => {
-                // success = false;
-                email = "";
+                failed = false;
             }, 2500);
-            return;
+        } catch {
+            failed = true;
+            setTimeout(() => {
+                failed = false;
+            }, 2500);
+        } finally {
+            loading = false;
         }
-        // const body = await response.json();
-        // errorMessage = body.details ?? "Something went wrong";
-        // TODO: match based on error code
-        errorMessage = "Something went wrong";
-        failed = true;
-        setTimeout(() => {
-            failed = false;
-        }, 2500);
-    } catch {
-        failed = true;
-        setTimeout(() => {
-            failed = false;
-        }, 2500);
-    } finally {
-        loading = false;
-    }
-};
-// TODO: make this a form
+    };
+    // TODO: make this a form
 </script>
 
 <div class="flex flex-col max-sm:items-center flex-1 max-w-400">

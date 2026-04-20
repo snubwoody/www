@@ -22,7 +22,7 @@
                 "noUnusedImports": "off"
             },
 
-            "style": {"noNonNullAssertion": "off"},
+            "style": { "noNonNullAssertion": "off" },
             "complexity": {
                 "noImportantStyles": "off"
             }
@@ -37,6 +37,9 @@
         "parser": {
             "tailwindDirectives": true
         }
+    },
+    "html": {
+        "formatter": { "indentScriptAndStyle": true }
     },
     "assist": {
         "enabled": true,

@@ -11,5 +11,3 @@ const observer = new IntersectionObserver((entries) => {
 for (const element of elements) {
     observer.observe(element);
 }
-
-j
