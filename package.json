@@ -26,16 +26,17 @@
         "sharp": "^0.34.5"
     },
     "devDependencies": {
-        "@types/mdast": "^4.0.4",
         "@astrojs/check": "^0.9.8",
         "@astrojs/rss": "^4.0.18",
         "@astrojs/sitemap": "^3.7.2",
+        "@biomejs/biome": "2.4.12",
         "@eslint/js": "^10.0.1",
         "@lucide/astro": "^1.7.0",
         "@lucide/svelte": "^1.7.0",
         "@playwright/test": "^1.59.1",
         "@stylistic/eslint-plugin": "^5.10.0",
         "@tailwindcss/vite": "^4.2.2",
+        "@types/mdast": "^4.0.4",
         "@types/node": "^25.5.2",
         "@typescript-eslint/parser": "^8.58.0",
         "astro": "^6.1.3",
