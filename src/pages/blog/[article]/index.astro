@@ -36,7 +36,6 @@ const {
 } = await render(post);
 
 const image = post.data.image;
-console.log(frontmatter)
 // TODO: use Astro image
 // TODO: test the metadata fields in playwright
 ---
@@ -52,7 +51,6 @@ console.log(frontmatter)
         <meta name="twitter:image" content={`https://www.wakunguma.com${image}`}>
     </Fragment>
     <main class="flex flex-col justify-center items-center scroll-smooth">
-        <!--TODO: use image component-->
         <img src={image} alt="" class="thumbnail">
         <div class="main-content">
             <header>
