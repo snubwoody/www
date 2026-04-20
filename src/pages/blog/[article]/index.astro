@@ -5,6 +5,7 @@ import { formatDate } from "../../../lib/format";
 import {getEntry,getCollection,render} from "astro:content";
 import Share from "../../../components/blog/Share.astro";
 import SimilarArticles from "../../../components/blog/SimilarArticles.astro";
+import { Calendar, Clock3, BookOpenText } from "@lucide/astro";
 
 const {article} = Astro.params;
 export const getStaticPaths = async() => {
@@ -19,6 +20,7 @@ export const getStaticPaths = async() => {
     });
 };
 
+// TODO: shouldn't I redirect to /blog
 if (!article){
     return Astro.redirect("/404");
 }
@@ -27,11 +29,15 @@ if (!post){
     return Astro.redirect("/404");
 }
 
-const {Content,headings} = await render(post);
+const {
+    Content,
+    headings,
+    remarkPluginFrontmatter: frontmatter
+} = await render(post);
+
 const image = post.data.image;
-// TODO: change size of content
-// Make table of content smaller
-// Make content bigger
+// TODO: use Astro image
+// TODO: test the metadata fields in playwright
 ---
 
 <BaseLayout title={post.data.title}>
@@ -44,14 +50,35 @@ const image = post.data.image;
         <meta name="twitter:card" content={"summary_large_image"}>
         <meta name="twitter:image" content={`https://www.wakunguma.com${image}`}>
     </Fragment>
-    <main class="md:px-64 flex justify-center scroll-smooth">
-        <div class="space-y-36 md:py-40 w-full">
-            <img src={image} alt="" class="aspect-[16/9] w-full object-cover">
-            <header class="flex flex-col items-center">
-                <h1 class="text-center max-md:text-h3">{post.data.title}</h1>
-                <p class="mt-8">{formatDate(post.data.published.toString())}</p>
+    <main class="flex flex-col justify-center items-center scroll-smooth">
+        <img src={image} alt="" class="thumbnail">
+        <div class="main-content">
+            <header>
+                <a class="btn-underline mb-8 w-fit" href="/">
+                    <h6>Wakunguma Kalimukwa</h6>
+                </a>
+                <h1 class="max-md:text-h3 mb-20">{post.data.title}</h1>
+                <!-- TODO: use en-GB formatting -->
+                <!-- TODO: check on smaller screens -->
+                <ul class="metadata">
+                    <li>
+                        <Calendar size='16'/>
+                        <p>{formatDate(post.data.published.toString())}</p>
+                    </li>
+                    <li class="metadata-divider" aria-hidden="true"></li>
+                    <li>
+                        <BookOpenText size='16'/>
+                        <p>{frontmatter.wordCount} words</p>
+                    </li>
+                    <li class="metadata-divider" aria-hidden="true"></li>
+                    <li>
+                        <Clock3 size='16'/>
+                        <p>{frontmatter.minutesToRead} minute read</p>
+                    </li>
+                </ul>
             </header>
-            <div class="flex px-24 md:px-64 gap-64 pb-64 justify-center">
+            <div class="w-full bg-purple-500 h-5"></div>
+            <div class="flex px-8 md:px-24 lg:px-64 gap-64 pb-64 justify-center">
                 <div class="space-y-40">
                     <article class="blog-content">
                         <Content/>
@@ -59,7 +86,7 @@ const image = post.data.image;
                     <Share postId={post.id}/>
                     <SimilarArticles/>
                 </div>
-                <aside aria-label="Content Summary" class="max-lg:hidden h-full space-y-16 sticky top-32">
+                <aside aria-label="Table of contents">
                     <h6>On this page</h6>
                     <ul>
                         {headings.map(heading => (
@@ -76,13 +103,85 @@ const image = post.data.image;
 </BaseLayout>
 
 <style>
+    aside {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        position: sticky;
+        top: 32px;
+        flex-shrink: 0;
+
+        @media (width < 1024px) {
+            display: none;
+        }
+    }
+
+    .main-content{
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+        width: 100%;
+        max-width: 1250px;
+        padding-inline: 64px;
+
+        @media (width < 768px) {
+            padding-inline: 20px;
+        }
+    }
+
+    .metadata{
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        @media (width < 768px) {
+            flex-direction: column;
+            align-items: start;
+            gap: 8px;
+        }
+
+        li{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-text-neutral);
+        }
+
+        .metadata-divider{
+            width: 2px;
+            height: 24px;
+            background-color: var(--color-neutral-50);
+
+            @media (width < 768px) {
+                display: none;
+            }
+        }
+    }
+
+    header{
+        display: flex;
+        flex-direction: column;
+        padding-top: 32px;
+    }
+
+    .thumbnail{
+        width: 100%;
+        object-fit: cover;
+        aspect-ratio: 21/9;
+
+        @media (width < 768px) {
+            aspect-ratio: 16/9;
+        }
+    }
+
     .heading-link{
         padding: 8px 16px;
         margin-left: calc(16px * var(--depth));
-        border-left: 2px solid color-mix(in srgb, black 5%,transparent);
+        border-left: 2px solid color-mix(in oklch, black 5%,transparent);
         position: relative;
         [data-theme="dark"] & {
-            border-color: color-mix(in srgb, white 5%,transparent)
+            border-color: color-mix(in oklch, white 5%,transparent)
         }
     }
 </style>

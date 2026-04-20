@@ -22,7 +22,8 @@
 	--text-xs--line-height: 1.5;
 
 	--font-weight-regular: 400;
-	--font-weight-bold: 600;
+	--font-weight-medium: 500;
+	--font-weight-bold: 700;
 }
 
 @layer base{
