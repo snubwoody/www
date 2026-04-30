@@ -43,7 +43,31 @@ fn main(){
 }
 ```
 
-Notice that smol-rs doesn't require tasks to be `Sync` or `'static`
+Notice that smol-rs doesn't require tasks to be `Sync` or `'static`.
+
+```rust
+pub struct Waker {
+    waker: RawWaker,
+}
+
+impl Waker {
+    #[inline]
+    pub fn wake(self) {
+        // The actual wakeup call is delegated through a virtual function call
+        // to the implementation which is defined by the executor.
+
+        // Don't call `drop` -- the waker will be consumed by `wake`.
+        let this = ManuallyDrop::new(self);
+
+        // SAFETY: This is safe because `Waker::from_raw` is the only way
+        // to initialize `wake` and `data` requiring the user to acknowledge
+        // that the contract of `RawWaker` is upheld.
+        unsafe { (this.waker.vtable.wake)(this.waker.data) };
+    }
+}
+```
+
+The function is stored and called through a pointer in a VTable.
 
 ## Ideas
 
