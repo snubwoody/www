@@ -69,6 +69,24 @@ impl Waker {
 
 The function is stored and called through a pointer in a VTable.
 
+`data: *const ()`: data pointer??
+
+So far all the types are in `std`.
+
+If we compare at the definition for `spawn` in `smol` and `tokio`
+
+```rust
+pub fn spawn<T: Send + 'a>(&self, future: impl Future<Output = T> + Send + 'a) -> Task<T> {
+    let state = self.state();
+    let mut active = state.active();
+
+    // SAFETY: `T` and the future are `Send`.
+    unsafe { Self::spawn_inner(state, future, &mut active) }
+}
+```
+
+`smol` is `Send + 'a` while `tokio` is `Send + Sync + 'static`
+
 ## Ideas
 
 - Showcase situations where there could be errors.
@@ -79,3 +97,4 @@ The function is stored and called through a pointer in a VTable.
 - [The state of async runtimes](https://corrode.dev/blog/async/)
 - [Lang Team: Async Vision Document](https://hackmd.io/p6cmRZ9ZRQ-F1tlhGaN9rg)
 - [Async rust (No idea where this is from)](https://www.chiark.greenend.org.uk/~ianmdlvl/rust-polyglot/async.html)
+- [Sans IO](https://www.firezone.dev/blog/sans-io)
