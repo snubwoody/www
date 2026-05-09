@@ -4,7 +4,8 @@ preview: false
 published: 2026-02-08
 ---
 
-The [paradox of plenty](https://en.wikipedia.org/wiki/Resource_curse) is the idea that resource rich countries are, paradoxically, the least developed nations. Talk about Africa for long enough and you will eventually stumble upon the topic of corruption, a plague that has affected the entire continent for far too long now.
+The [paradox of plenty](https://en.wikipedia.org/wiki/Resource_curse) is the idea that resource rich countries are, paradoxically, the least developed nations. 
+Talk about Africa for long enough and you will eventually stumble upon the topic of corruption, a plague that has affected the entire continent for far too long now.
 
 ## History of corruption
 It's important to note that this isn't some sort of cultural issue, Africans are not just inherently corrupt. Before colonialism there were plenty of kingdoms and clans like the [Zulu kingdom](https://www.britannica.com/place/Zululand), [Luba kingdom](https://www.worldhistory.org/Kingdom_of_Luba/) and [Oyo empire](https://en.wikipedia.org/wiki/Oyo_Empire) that had their own languages, cultures, traditions and were involved in trade with western Asia and the India Ocean region[^1]. Rather, corruption is a socioeconomic issue that has its roots in colonialism.
