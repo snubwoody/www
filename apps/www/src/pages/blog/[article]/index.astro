@@ -3,6 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import "../../../styles/blog.css";
 import { formatDate } from "../../../lib/format";
 import {getEntry,getCollection,render} from "astro:content";
+import Share from "../../../components/blog/Share.astro";
 import SimilarArticles from "../../../components/blog/SimilarArticles.astro";
 import { Calendar, Clock3, BookOpenText } from "@lucide/astro";
 
@@ -19,12 +20,11 @@ export const getStaticPaths = async() => {
     });
 };
 
+// TODO: shouldn't I redirect to /blog
 if (!article){
-    return Astro.redirect("/blog");
+    return Astro.redirect("/404");
 }
-
 const post = await getEntry("articles",article);
-
 if (!post){
     return Astro.redirect("/404");
 }
@@ -58,6 +58,8 @@ const image = post.data.image;
                     <h6>Wakunguma Kalimukwa</h6>
                 </a>
                 <h1 class="max-md:text-h3 mb-20">{post.data.title}</h1>
+                <!-- TODO: use en-GB formatting -->
+                <!-- TODO: check on smaller screens -->
                 <ul class="metadata">
                     <li>
                         <Calendar size='16'/>
@@ -81,6 +83,7 @@ const image = post.data.image;
                     <article class="blog-content">
                         <Content/>
                     </article>
+                    <Share postId={post.id}/>
                     <SimilarArticles/>
                 </div>
                 <aside aria-label="Table of contents">

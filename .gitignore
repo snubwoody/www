@@ -1,11 +1,9 @@
-**/node_modules
+# Output
+node_modules/
 .svelte-kit/
-
-**/.obsidian
-
 dist/
 .astro/
-.vercel
+.vercel/
 
 # logs
 npm-debug.log*
@@ -18,14 +16,17 @@ pnpm-debug.log*
 .idea/
 
 # environment variables
-**/.env*
+.env.*
+.env
 
 # macOS-specific files
-.DS_Store
+.DS_Store/
 
 # Test ouput
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
 
+# Misc
+.obsidian/

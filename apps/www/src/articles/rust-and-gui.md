@@ -1,10 +1,10 @@
 ---
 title: Rust & GUI
-synopsis: GUI is hard in rust
 author: Wakunguma Kalimukwa
 published: 2025-09-30
 image: https://cdn.pixabay.com/photo/2020/04/02/22/05/home-office-4996834_1280.jpg
 imageAsset: ../assets/internal/thumbnails/branching-strategies.png
+synopsis: GUI is hard in rust
 preview: true
 tags:
   - GUI 
