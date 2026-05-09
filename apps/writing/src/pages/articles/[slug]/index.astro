@@ -2,6 +2,7 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import {getEntry,getCollection,render} from "astro:content";
 import { Calendar, Clock3, BookOpenText } from "@lucide/astro";
+import "@styles/blog.css"
 
 const { slug } = Astro.params;
 export const getStaticPaths = async() => {
@@ -30,19 +31,14 @@ const {
     headings,
     remarkPluginFrontmatter: frontmatter
 } = await render(post);
-
-const image = post.data.image;
 ---
 
 <BaseLayout title={post.data.title}>
     <Fragment slot="head">
         <meta name="og:url" content={`https://www.wakunguma.com/blog/${post.id}`}>
-        <meta property="og:image" content={`https://www.wakunguma.com${image}`}>
         <meta property="og:locale" content="en_GB">
-        <meta property="og:image:url" content={`https://www.wakunguma.com${image}`}>
         <meta property="article:author" content="Wakunguma Kalimukwa">
         <meta name="twitter:card" content={"summary_large_image"}>
-        <meta name="twitter:image" content={`https://www.wakunguma.com${image}`}>
     </Fragment>
     <main class="flex flex-col justify-center items-center scroll-smooth">
         <div class="main-content">
