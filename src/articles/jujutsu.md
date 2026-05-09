@@ -1,7 +1,7 @@
 ---
 title: Jujutsu is pretty good
 author: Wakunguma Kalimukwa
-published: 2025-06-23
+published: 2026-05-12
 image: /internal/thumbnails/rust-weird-expressions.png
 imageAsset: ../assets/internal/thumbnails/rust-weird-expressions.png
 imageSize: 1200000
