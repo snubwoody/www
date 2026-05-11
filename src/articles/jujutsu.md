@@ -5,86 +5,72 @@ published: 2026-05-12
 image: /internal/thumbnails/rust-weird-expressions.png
 imageAsset: ../assets/internal/thumbnails/rust-weird-expressions.png
 imageSize: 1200000
-synopsis: Explore weird quirks of rusts type system
+synopsis: Jutusu is pretty good
 preview: false
 tags:
   - Version control
   - Jujutsu
 ---
 
-I've been using [Jujutsu](https://github.com/jj-vcs/jj) as a VCS for the past couple months and it's been pretty good. Jujutsu is a new version control system, that abstracts the user interface from the storage system. This means it's possible to use it with many backends, Mercurial, Git, Subversion. So these are the highlights of my favourite features and experience.
+I've been using Jujutsu for version control for the past couple months and it's been pretty good. I've never known anything other than Git, so I had no real reasons to change. But still, I kept hearing about how it has such a better UX than git, so I decided to try it out, and I simply never left. So these are some highlights of my experience and favourite features.
 
-Jujutsu doesn't have anything that Git can't be done in Git, but it makes things so much easier.
+In Jujutsu, changes to the repository are represented as a [change](https://reasonablypolymorphic.com/blog/jj-strategy/). Jujutsu supports multiple backends, and when using the Git backend, every change is stored inside of a commit. This makes it fully compatible with Git. The current working copy is also stored as a commit. Any changes to the repository update the active commit, as such there is no staging area. This means I never have to use `git stash` again. There's nothing wrong with `git stash`, it's just that I always forget stashes I created. 
 
-At the time of writing Jujutsu is on v0.41.0
-
-In Jujutsu, changes to the repo are represented as a "change", backed up with a git commit (if using a git backend). Every change has a consistent change id, as well as a commit id for the git commit, which can change under certain operations [??]. The current working copy is also a change, any changes to files are tracked. There is no index or staging area. Most `jj` commands will update the working copy.
-
->So we are protected from accidentally deleting stuff on the `main` branch. Protected commits are called **immutable** and Jujutsu represents them in the log graph with a **diamond** (**`◆`**) symbol. Unprotected commits are called **mutable** and represented with a **circle** (**`○`**). These protections don't just apply to `jj abandon` and `jj rebase`, but to all commands that edit existing history. We'll learn about a lot of commands like that in the next level.
-
-
-```
-**Git users:** The commit ID/hash is what you're used to from Git and should match what you see when you look at the repository using `git log` in a Git checkout of the repository. The change ID however, is a new concept, unique to Jujutsu.
-```
-
-## Editing
-
-- `jj arrange`
+Another concept I really appreciate is anonymous branches. Branches don't have names, they just diverge from the parent commit.
 
 ## Revsets
-
-[Revsets](https://docs.jj-vcs.dev/latest/revsets/) is a functional language that describe changes in a Jujutsu repository. For convenience, changes can be referred to using a short id, which is highlighted in the terminal. Revsets is an entire language, but the features I use the most are:
-
+[Revsets](https://docs.jj-vcs.dev/latest/revsets/) are expressions that are used to specify revisions in Jujutsu. For convenience, changes can be referred to using a short id, which is highlighted in the terminal. The working copy can be referred to using `-r @`. Revsets is an entire language, with plenty of complex features, but the features I use the most are:
 - `x-`: Parents of `x`
 - `x+`: Children of `x`
 - `x::`: Descendants of `x`, including `x` itself
 - `::x`: Ancestors of `x`, including `x` itself
 
-Let's say you made a couple changes and you simply want to get rid of them. You can `jj abandon` those specific changes and (if there's no conflicts) move on. `jj abandon -r x::y` [check]
-
-You can get fairly wild with these though `jj squash -r "description(Format) | description(Lint)"`
+As an example, let's say you made a couple changes that you want to get rid of. Deleting commits in Git will have you searching through [Stack Overflow threads](https://stackoverflow.com/questions/1338728/how-do-i-delete-a-commit-from-a-branch). In Jujutsu you would use `jj abandon` along with revsets pointing to the changes to delete.
 
 ```bash
-@  nrsyvtsv contact@wakunguma.com 2026-05-04 20:51:35 cd070cb7
+jj log
+@  qnyptlup contact@wakunguma.com 2026-05-10 16:19:04 33354738
 │  (empty) (no description set)
-○  vmytxsvu contact@wakunguma.com 2026-05-04 20:51:35 6a20a66a
-│  Run cargo clippy
-○  oxpztmrr contact@wakunguma.com 2026-05-04 20:51:05 ffd6221d
-│  Show app version in settings panel
-○  sttllttz contact@wakunguma.com 2026-05-04 20:50:24 d89ed721
-│  Format code
-○  kulvtuzy contact@wakunguma.com 2026-05-04 20:49:58 536eac2e
-│  Add export button
-○  xzptptkm contact@wakunguma.com 2026-05-04 20:46:50 20a39ac3
+○  kuptqpxl contact@wakunguma.com 2026-05-10 16:19:04 62cee53c
+│  Valid commit
+○  rvlmqszq contact@wakunguma.com 2026-05-10 16:18:55 232c1dd4
+│  Invalid commit
+○  poorzzwq contact@wakunguma.com 2026-05-10 16:18:39 2705a650
+│  Invalid commit
+○  ooxonzol contact@wakunguma.com 2026-05-10 16:18:30 ec36d2d9
+│  Valid commit
+○  qmsynsqs contact@wakunguma.com 2026-05-10 16:18:22 724e5b00
+│  Initial commit
+◆  zzzzzzzz root() 00000000
+
+jj abandon -r p::r
+Abandoned 2 commits:
+  rvlmqszq 232c1dd4 Invalid commit
+  poorzzwq 2705a650 Invalid commit
+Rebased 2 descendant commits onto parents of abandoned commits
+Working copy  (@) now at: qnyptlup 088bf033 (empty) (no description set)
+Parent commit (@-)      : kuptqpxl 0ff98790 Valid commit
+Added 1 files, modified 0 files, removed 1 files
+
+jj log
+@  qnyptlup contact@wakunguma.com 2026-05-10 16:20:11 088bf033
+│  (empty) (no description set)
+○  kuptqpxl contact@wakunguma.com 2026-05-10 16:20:11 0ff98790
+│  Valid commit
+○  ooxonzol contact@wakunguma.com 2026-05-10 16:18:30 ec36d2d9
+│  Valid commit
+○  qmsynsqs contact@wakunguma.com 2026-05-10 16:18:22 724e5b00
 │  Initial commit
 ◆  zzzzzzzz root() 00000000
 ```
 
-The simplest way to refer to a change is using the change id `jj log -rzzzzzz`
+Changes can also be referred to using metadata, such as the description. For example, we could squash all format...
 
 ## Operations
-In JJ every operation performed on the repository is stored. Every single thing, changes, rebasing, squash, edits, deletions. After every change, a snapshot of the previous repo state is stored, meaning every operation can be undone using `jj undo`. Although some operations, like `jj git push`, can't really be undone, how would you even unsend a request?
+Jujutsu records and stores every operation performed on the repository in the [operation log](https://docs.jj-vcs.dev/latest/operation-log/). Every single thing, changes, rebasing, squashes, edits and so on. Before every change, a snapshot of the current repository state is stored. This means every operation can be undone using `jj undo`.
 
-## Branches -> Bookmarks
-
-Git works via branches everything is a branch. Work on changes in a specific branch then merge or rebase those onto another branch. JJ works a bit differently.
-
-The jj equivalent of branches would be bookmarks. When you `jj git init`, in an existing repo, all the branches are "converted" to bookmarks.
-
-Although saying JJ's bookmarks are Git's branches, is true, it's an oversimplification. Bookmarks are simply pointers to a change. Multiple bookmarks can point to the same change, in fact this is how origins are tracked `main` and `main@origin` both point to the same change (if they are tracked). In Git, you can't really have two coexisting branches, that both have the same changes [can you?]. 
-## Crap!
-
-One of my favourite parts of JJ is the editable commit history. I was pretty sceptical about this when I first heard of it, it seems like it would be a nightmare to maintain. But it works best when 
-
-`jj undo` is one of the best things to ever happen to my workflow. Grub is dumb and grub messes up sometimes.
-
-- `jj split`
-- `jj diffedit`
-
-
-## How Jujutsu handles conflicts
-
-Something that caught me off guard is how Jujutsu is that it stores conflicts as a change. Coming from Git, this is quite strange because Git conflicts halt the entire operation, preventing you from moving forward.
+## Conflicts
+Something that caught me off guard about Jujutsu is that it stored conflicts as a change. Coming from Git, this is quite strange because Git conflicts halt the entire operation, preventing you from moving forward.
 
 We can create a simple conflict, as demonstration, by updating the same file on different branches and rebasing the commits.
 
@@ -123,7 +109,8 @@ jj log
 │  Create README.md
 ```
 
-Jujutsu stores the conflicted state as a change, allowing you to continue the rest of your work, and handle the conflict whenever necessary. The "2-sided conflict" refers to the `main` branch and the branch being rebased. Merging multiple conflicting branches can result in `n-sided` conflicts. (example...)
+
+Jujutsu stores the conflicted state as a change, allowing you to continue the rest of your work, and handle the conflict whenever necessary. The "2-sided conflict" refers to the `main` branch and the branch being rebased. Merging multiple conflicting branches can result in `n-sided` conflicts.
 
 ```text
 <<<<<<< conflict 1 of 1
@@ -152,29 +139,5 @@ Working copy  (@) : wyssxxxw d933302f Update README.md
 Parent commit (@-): znuxrtvt 2169d89d Update README.md
 ```
 
-There are lots of benefits to this approach, for example, you could just discard the commit. Act like it never happened. This probably only works in the rare occasion where you were going to abandon that file anyways.
-
-We can also continue with the repo and fix the conflict later. This is the real benefit.
-Say the conflict only affects certain files that you don't plan on working on, you can leave the commit as is, finish the work, and then resolve the conflict when you're ready. (example...)
-
-Another workflow instead of creating a new commit, is editing the conflicted commit directly. This is where Jujutsu's mutable commits come in handy.
-
-This comes with a caveat, however, conflicted changes cannot be pushed to git remotes.
-
-`jj git push` will not push conflicted commits, because Git doesn't have any concept of storing commits.
-
-What does 2 sided conflict mean...?
-
-It's only mutable when it hasn't been pushed...
-
-Of course JJ will enable workflows that wouldn't have been possible with Git, or at least wouldn't have been easy to use.
-
-The best thing is that JJ is fully compatible with Git so your personal choices don't have to affect other people using the codebase. This also means that if you decide you don't like it you could commit your last changes and delete the `.jj` folder.
-
-Pushing a branch with conflicts will not work.
-
-How is it stored in git?
-
-## Further reading
-- [Jujutsu for everyone](https://jj-for-everyone.github.io/log.html)
+The caveat to this is that `jj git push` will not push conflicted comits. (might have changed)
 
