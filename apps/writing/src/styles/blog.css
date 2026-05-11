@@ -3,8 +3,6 @@
 .blog-content{
     @apply space-y-16;
 
-    /*max-width: 75ch;*/
-
     li{
         &::before{
             content: '•';
