@@ -30,22 +30,21 @@
         background-color: var(--color-surface-neutral-dim);
     }
 
+    
     a{
         display: inline;
-    }
-
-
-
-    a{
-        color: var(--color-text-body);
-        text-decoration: underline var(--color-purple-300);
+        color: var(--color-purple-500);
+        text-decoration: underline var(--color-purple-500);
         -webkit-text-decoration-style: underline;
-        -webkit-text-decoration-color: var(--color-purple-300);
+        -webkit-text-decoration-color: var(--color-purple-500);
         text-underline-offset: 4px;
+        
+        [data-theme="dark"] &{
+            color: var(--color-purple-100);
+            text-decoration: underline var(--color-purple-200);
+        }
     }
-
-
-
+    
     blockquote{
         padding: 16px;
         border-left: 3px solid var(--color-border-brand);
