@@ -16,16 +16,19 @@ I've been using Jujutsu for version control for the past couple months and it's 
 
 In Jujutsu, changes to the repository are represented as a [change](https://reasonablypolymorphic.com/blog/jj-strategy/). Jujutsu supports multiple backends, and when using the Git backend, every change is stored inside of a commit. This makes it fully compatible with Git. The current working copy is also stored as a commit. Any changes to the repository update the active commit, as such there is no staging area. This means I never have to use `git stash` again. There's nothing wrong with `git stash`, it's just that I always forget stashes I created. 
 
+>The difference between a commit and a change set is that a commit never changes - it can only be replaced with another commit because commits are immutable. But in jj, you can make a series of changes and add small fixes (like correcting typos) to earlier changes, and the subsequent changes are automatically updated, without needing to do a manual branch / rebase each time. This makes it much less effort to keep changes tidy and to the point. For absolutely nobody in the future it will matter that you initially typed `pritnf(msg, vak)` instead of `printf(msg,val)`. Why put this into an own commit? But merging it into an earlier change requires rebasing.
+
 Another concept I really appreciate is anonymous branches. Branches don't have names, they just diverge from the parent commit.
 
 ## Revsets
-[Revsets](https://docs.jj-vcs.dev/latest/revsets/) are expressions that are used to specify revisions in Jujutsu. For convenience, changes can be referred to using a short id, which is highlighted in the terminal. The working copy can be referred to using `-r @`. Revsets is an entire language, with plenty of complex features, but the features I use the most are:
+[Revsets](https://docs.jj-vcs.dev/latest/revsets/) are expressions that are used to specify revisions in Jujutsu. For convenience, changes can be referred to using a short id, which is highlighted in the terminal. Revsets is an entire language, with plenty of complex features, but the features I use the most are:
+- `@`: The working copy
 - `x-`: Parents of `x`
 - `x+`: Children of `x`
 - `x::`: Descendants of `x`, including `x` itself
 - `::x`: Ancestors of `x`, including `x` itself
 
-As an example, let's say you made a couple changes that you want to get rid of. Deleting commits in Git will have you searching through [Stack Overflow threads](https://stackoverflow.com/questions/1338728/how-do-i-delete-a-commit-from-a-branch). In Jujutsu you would use `jj abandon` along with revsets pointing to the changes to delete.
+As an example, let's say you made a couple changes that you just want to get rid of. Deleting commits in Git will have you searching through [Stack Overflow threads](https://stackoverflow.com/questions/1338728/how-do-i-delete-a-commit-from-a-branch). In Jujutsu you would use `jj abandon` along with revsets pointing to the changes to delete.
 
 ```bash
 jj log
@@ -72,7 +75,7 @@ Jujutsu records and stores every operation performed on the repository in the [o
 ## Conflicts
 Something that caught me off guard about Jujutsu is that it stored conflicts as a change. Coming from Git, this is quite strange because Git conflicts halt the entire operation, preventing you from moving forward.
 
-We can create a simple conflict, as demonstration, by updating the same file on different branches and rebasing the commits.
+We can create a simple conflict, as an example, by updating the same file on different branches and rebasing the commits.
 
 ```bash
 jj log
@@ -110,7 +113,7 @@ jj log
 ```
 
 
-Jujutsu stores the conflicted state as a change, allowing you to continue the rest of your work, and handle the conflict whenever necessary. The "2-sided conflict" refers to the `main` branch and the branch being rebased. Merging multiple conflicting branches can result in `n-sided` conflicts.
+Jujutsu stores the conflicted state as a change, allowing you to continue the rest of your work, and handle the conflict whenever necessary. The "2-sided conflict" refers to the `main` branch and the branch being rebased.
 
 ```text
 <<<<<<< conflict 1 of 1
@@ -140,4 +143,3 @@ Parent commit (@-): znuxrtvt 2169d89d Update README.md
 ```
 
 The caveat to this is that `jj git push` will not push conflicted comits. (might have changed)
-
