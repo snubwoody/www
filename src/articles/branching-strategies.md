@@ -5,7 +5,6 @@ author: Wakunguma Kalimukwa
 synopsis: What's the most optimal branching strategy?
 image: /internal/thumbnails/branching-strategies.png
 imageAsset: ../assets/internal/thumbnails/branching-strategies.png
-imageSize: 5723169
 published: 2025-08-06
 tags:
   - Git

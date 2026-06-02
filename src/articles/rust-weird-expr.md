@@ -4,7 +4,6 @@ author: Wakunguma Kalimukwa
 published: 2025-06-23
 image: /internal/thumbnails/rust-weird-expressions.png
 imageAsset: ../assets/internal/thumbnails/rust-weird-expressions.png
-imageSize: 1200000
 synopsis: Explore weird quirks of rusts type system
 preview: false
 tags:

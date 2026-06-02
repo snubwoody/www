@@ -5,7 +5,6 @@ author: Wakunguma Kalimukwa
 synopsis: Don't roll your own auth
 image: /internal/thumbnails/roll-your-own-auth.png
 imageAsset: ../assets/internal/thumbnails/roll-your-own-auth.png
-imageSize: 12
 published: 2025-08-30
 tags:
   - Auth

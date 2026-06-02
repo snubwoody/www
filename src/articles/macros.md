@@ -5,7 +5,6 @@ author: Wakunguma Kalimukwa
 synopsis: Macros are weird
 image: /internal/thumbnails/macros.png
 imageAsset: ../assets/internal/thumbnails/macros.png
-imageSize: 12
 published: 2025-08-30
 tags:
   - Macros
