@@ -5,7 +5,6 @@ author: Wakunguma Kalimukwa
 synopsis: ""
 image: /internal/thumbnails/hosting-rust.png
 imageAsset: ../assets/internal/thumbnails/branching-strategies.png
-imageSize: 0
 published: 2025-09-12
 tags: [Film] 
 ---

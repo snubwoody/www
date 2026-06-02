@@ -5,7 +5,6 @@ author: Wakunguma Kalimukwa
 synopsis: ""
 image: /internal/thumbnails/desktop-apps.png
 imageAsset: ../assets/internal/thumbnails/desktop-apps.png
-imageSize: 0
 published: 2026-01-25
 tags:
   - GUI

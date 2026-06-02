@@ -4,7 +4,6 @@ author: Wakunguma Kalimukwa
 published: 2025-06-23
 image: /internal/thumbnails/rust-weird-expressions.png
 imageAsset: ../assets/internal/thumbnails/rust-weird-expressions.png
-imageSize: 1200000
 synopsis: Everything is a web app these days, but it wasn't always like that.
 preview: true
 tags:
