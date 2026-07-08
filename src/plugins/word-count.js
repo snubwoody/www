@@ -6,7 +6,7 @@ import {toString} from "mdast-util-to-string";
  */
 
 /**
- * The amount of words the average person reads per minute.
+ * The number of words the average person reads per minute.
  */
 export const WORDS_PER_MINUTE = 200;
 
@@ -36,7 +36,7 @@ export const splitWords = (text) => {
 };
 
 /**
- * Calculates the reading time in minutes.
+ * Returns the reading time in minutes.
  *
  * @param {string[]}words
  * @returns {number} The reading time (in minutes).

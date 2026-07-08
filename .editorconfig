@@ -9,5 +9,5 @@ charset = utf-8
 [*.yml]
 indent_size = 2
 
-[*.{svelte,svelte.ts}]
+[*.{svelte,svelte.ts,ts,js}]
 indent_size = 4
