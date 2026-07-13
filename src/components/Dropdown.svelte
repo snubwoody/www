@@ -1,15 +1,14 @@
 <script lang="ts">
-    import {DropdownMenu} from "bits-ui";
-    import {ChevronDown} from "@lucide/svelte";
-    import type {Snippet} from "svelte";
+    import { ChevronDown } from "@lucide/svelte";
+    import { DropdownMenu } from "bits-ui";
+    import type { Snippet } from "svelte";
 
-    interface Props{
-        trigger: Snippet,
-        children: Snippet,
-
+    interface Props {
+        trigger: Snippet;
+        children: Snippet;
     }
 
-    const {trigger,children}:Props = $props();
+    const { trigger, children }: Props = $props();
     // TODO: animate content
     let open = $state(false);
 </script>

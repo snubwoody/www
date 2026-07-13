@@ -1,0 +1,54 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "includes": ["**", "!!**/dist", "!**/*.svg"]
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4
+    },
+    "linter": {
+        "rules": {
+            "complexity": {
+                "noImportantStyles": "off"
+            },
+            "a11y": {
+                "noSvgWithoutTitle": "off",
+                "useButtonType": "off"
+            },
+            "style": {
+                "noDescendingSpecificity": "off"
+            }
+        }
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "double"
+        }
+    },
+    "assist": {
+        "enabled": true,
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    },
+    "css": {
+        "parser": {
+            "tailwindDirectives": true
+        }
+    },
+    "html": {
+        "experimentalFullSupportEnabled": true,
+        "formatter": {
+            "indentScriptAndStyle": true
+        }
+    }
+}

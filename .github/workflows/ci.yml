@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     branches: ["main"]
-  pull_request: 
+  pull_request:
     branches: ["main"]
 concurrency:
   group: ci-${{ github.ref }}-${{github.workflow}}
@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install
       - name: Sync astro
         run: pnpm astro sync
@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: Cache playwright browsers
         uses: actions/cache@v4
         id: playwright-cache
@@ -64,10 +64,10 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install
       - run: pnpm build
-  lint:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -79,12 +79,12 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22.x
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install
-      - run: pnpm lint
+      - run: pnpm check
   all-systems-pass:
     runs-on: ubuntu-latest
-    needs: [lint,build,test,end-to-end-tests]
+    needs: [check, build, test, end-to-end-tests]
     steps:
       - uses: actions/checkout@v5
       - name: All systems go

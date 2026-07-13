@@ -1,19 +1,16 @@
 ---
-import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import Navbar from "../components/Navbar.astro";
 import "../styles/app.css";
 import Analytics from "@vercel/analytics/astro";
 
 interface Props {
-    title?: string
-    description?: string,
-    imageUrl?:string
+    title?: string;
+    description?: string;
+    imageUrl?: string;
 }
 
-const {
-    title = "Wakunguma Kalimukwa",
-    description
-} = Astro.props;
+const { title = "Wakunguma Kalimukwa", description } = Astro.props;
 ---
 
 <!doctype html>

@@ -1,20 +1,27 @@
 ---
 import { getCollection } from "astro:content";
-import {ChevronRight} from "@lucide/astro/icons";
+import { ChevronRight } from "@lucide/astro/icons";
 
-let articles = await getCollection("articles",(post) => {
+let articles = await getCollection("articles", (post) => {
     return post.data.preview !== true;
 });
-articles = articles.splice(0,5);
+articles = articles.splice(0, 5);
 ---
 
 <h6>Similar articles</h6>
 <ul class="space-y-16">
-    {articles.map(article => 
-        <a href={`/blog/${article.id}`} class="flex items-center justify-between">
-            <p>{article.data.title}</p>
-            <ChevronRight size="20"/>
-        </a>
-        <li class="y-divider"></li>
-    )}
+    {
+        articles.map((article) => (
+            <>
+                <a
+                    href={`/blog/${article.id}`}
+                    class="flex items-center justify-between"
+                >
+                    <p>{article.data.title}</p>
+                    <ChevronRight size="20" />
+                </a>
+                <li class="y-divider" />
+            </>
+        ))
+    }
 </ul>

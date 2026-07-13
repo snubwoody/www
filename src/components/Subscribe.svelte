@@ -1,6 +1,6 @@
 <script lang="ts">
+    import { ArrowRight } from "@lucide/svelte/icons";
     import Input from "./Input.svelte";
-    import {ArrowRight} from "@lucide/svelte/icons";
 
     let loading = $state(false);
     let failed = $state(false);
@@ -9,23 +9,23 @@
 
     const subscribe = async () => {
         // TODO: mock this
-        try{
+        try {
             loading = true;
             const url = "/api/subscribe";
-            const response = await fetch(url,{
-                method:"POST",
+            const response = await fetch(url, {
+                method: "POST",
                 headers: {
-                    "content-type":"application/json"
+                    "content-type": "application/json",
                 },
-                body: JSON.stringify({email})
+                body: JSON.stringify({ email }),
             });
 
-            if (response.ok){
+            if (response.ok) {
                 // success = true;
                 setTimeout(() => {
                     // success = false;
                     email = "";
-                },2500);         
+                }, 2500);
                 return;
             }
             // const body = await response.json();
@@ -35,16 +35,15 @@
             failed = true;
             setTimeout(() => {
                 failed = false;
-            },2500);
-        }catch{
+            }, 2500);
+        } catch {
             failed = true;
             setTimeout(() => {
                 failed = false;
-            },2500);
-        } finally{
+            }, 2500);
+        } finally {
             loading = false;
         }
-        
     };
     // TODO: make this a form
 </script>

@@ -6,8 +6,8 @@
         // eslint-disable-next-line prefer-const
         placeholder,
         // eslint-disable-next-line prefer-const
-        type = "text"
-    }:HTMLInputAttributes = $props();
+        type = "text",
+    }: HTMLInputAttributes = $props();
 </script>
 
 <input {type} bind:value={value} {placeholder}>
