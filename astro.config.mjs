@@ -1,12 +1,13 @@
 // @ts-check
 /* global process */
-import { defineConfig } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
-import sitemap from "@astrojs/sitemap";
+
 import { unified } from "@astrojs/markdown-remark";
-import svelte from "@astrojs/svelte";
 import node from "@astrojs/node";
+import sitemap from "@astrojs/sitemap";
+import svelte from "@astrojs/svelte";
 import vercel from "@astrojs/vercel";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "astro/config";
 import wordCount from "./src/plugins/word-count.js";
 
 export default defineConfig({

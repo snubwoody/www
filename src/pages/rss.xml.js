@@ -1,6 +1,6 @@
+import fs from "node:fs/promises";
 import rss from "@astrojs/rss";
 import { getPosts } from "../lib";
-import fs from "node:fs/promises";
 
 export const prerender = true;
 

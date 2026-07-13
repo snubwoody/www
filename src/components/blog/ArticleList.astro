@@ -1,9 +1,9 @@
 ---
-import { formatDate } from "../../lib/format";
 import { Picture } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import SortButton from "./SortButton.svelte";
 import { type SortOption, sortPosts } from "../../lib";
+import { formatDate } from "../../lib/format";
+import SortButton from "./SortButton.svelte";
 
 type Props = {
     posts: CollectionEntry<"articles">[];

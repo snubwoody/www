@@ -2,6 +2,7 @@
 import { ArrowRight } from "@lucide/astro";
 import { getPosts } from "../../lib";
 import { formatDate } from "../../lib/format";
+
 let posts = await getPosts();
 const totalPosts = posts.length;
 posts = posts.slice(0, 5);
@@ -16,56 +17,64 @@ posts = posts.slice(0, 5);
     </header>
     <div class="flex-1 space-y-32">
         <ul class="space-y-8 transition-all" aria-label="Article list">
-            {posts.map(post => (
-                <li data-observe>
-                    <a href={`/blog/${post.id}`} class="flex gap-16 items-center" data-astro-prefetch>
-                        <div class="space-y-8 flex-1">
-                            <h4>
-                                {post.data.title}
-                            </h4>
-                            <p>
-                                {formatDate(post.data.published.toString())}
-                            </p>
-                        </div>
-                        <ArrowRight size="20"/>
-                    </a>
-                </li>
-                <div class="y-divider"></div>
-            )
-            )}
+            {
+                posts.map((post) => (
+                    <>
+                        <li data-observe>
+                            <a
+                                href={`/blog/${post.id}`}
+                                class="flex gap-16 items-center"
+                                data-astro-prefetch
+                            >
+                                <div class="space-y-8 flex-1">
+                                    <h4>{post.data.title}</h4>
+                                    <p>
+                                        {formatDate(
+                                            post.data.published.toString(),
+                                        )}
+                                    </p>
+                                </div>
+                                <ArrowRight size="20" />
+                            </a>
+                        </li>
+                        <div class="y-divider" />
+                    </>
+                ))
+            }
         </ul>
         <a href="/blog" class="flex items-center gap-4 btn-underline w-fit">
-            View all articles ({totalPosts}) <ArrowRight size='20'/>
+            View all articles ({totalPosts}) <ArrowRight size="20" />
         </a>
     </div>
 </section>
 
 <style>
     header {
-        h2,p{
+        h2,
+        p {
             opacity: 0;
             translate: -10% 0;
             transition: all 1s;
 
-            &[data-visible="true"]{
+            &[data-visible="true"] {
                 opacity: 1;
                 translate: 0;
             }
         }
     }
 
-    li{
+    li {
         opacity: 0;
         translate: 0 50%;
         transition:
-                all 500ms,
-                opacity 1s,
-                translate 1s;
+            all 500ms,
+            opacity 1s,
+            translate 1s;
         padding-inline: 8px;
         padding-block: 16px;
         border-radius: var(--radius-lg);
 
-        *{
+        * {
             transition: all 500ms;
         }
 
@@ -79,15 +88,15 @@ posts = posts.slice(0, 5);
             padding-inline: 16px;
             color: white;
 
-            h4{
+            h4 {
                 color: white;
             }
 
-            svg{
+            svg {
                 display: block;
             }
 
-            [data-theme="dark"]{
+            [data-theme="dark"] {
                 background: var(--color-neutral-50);
                 color: var(--color-neutral-900);
                 h4 {
@@ -100,12 +109,13 @@ posts = posts.slice(0, 5);
             background: var(--color-neutral-50);
             color: var(--color-neutral-900);
 
-            h4,svg {
+            h4,
+            svg {
                 color: var(--color-neutral-900);
             }
         }
 
-        &[data-visible="true"]{
+        &[data-visible="true"] {
             opacity: 1;
             translate: 0;
         }

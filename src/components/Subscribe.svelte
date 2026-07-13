@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Input from "./Input.svelte";
     import { ArrowRight } from "@lucide/svelte/icons";
+    import Input from "./Input.svelte";
 
     let loading = $state(false);
     let failed = $state(false);

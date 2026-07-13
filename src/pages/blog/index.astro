@@ -1,6 +1,6 @@
 ---
-import Layout from "../../layouts/BaseLayout.astro";
 import ArticleList from "../../components/blog/ArticleList.astro";
+import Layout from "../../layouts/BaseLayout.astro";
 import { getPosts } from "../../lib";
 
 const articles = await getPosts({ sort: true });
@@ -13,64 +13,85 @@ export const prerender = false;
         <h1>Welcome</h1>
     </header>
     <main class="border-t border-border-neutral">
-        <aside class="border-r border-border-neutral divide-y divide-border-neutral max-w-[25rem] max-md:hidden">
+        <aside
+            class="border-r border-border-neutral divide-y divide-border-neutral max-w-[25rem] max-md:hidden"
+        >
             <div class="p-24 space-y-8">
                 <h6>Latest articles</h6>
                 <ul aria-label="Latest posts list" class="space-y-8">
-                    {latestPosts.map(post =>
-                        <li>
-                            <a href=`/blog/${post.id}` class="light:url underline">
-                                {post.data.title}
-                            </a>
-                        </li>
-                    )}
+                    {
+                        latestPosts.map((post) => (
+                            <li>
+                                <a
+                                    href={`/blog/${post.id}`}
+                                    class="light:url underline"
+                                >
+                                    {post.data.title}
+                                </a>
+                            </li>
+                        ))
+                    }
                 </ul>
             </div>
         </aside>
-        <ArticleList posts={articles}/>
+        <ArticleList posts={articles} />
     </main>
 </Layout>
 
 <style>
-    header{
+    header {
         display: grid;
         place-items: center;
         height: 275px;
         background-size: 16px 16px;
         background-image:
-            linear-gradient(to bottom,rgba(255,255,255,0.075) 1px ,transparent 1px),
-            linear-gradient(to right,rgba(255,255,255,0.075) 1px ,transparent 1px);
+            linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.075) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0.075) 1px,
+                transparent 1px
+            );
 
-        [data-theme="light"] &{
+        [data-theme="light"] & {
             background-image:
-                linear-gradient(to bottom,rgba(0,0,0,0.03) 1px ,transparent 1px),
-                linear-gradient(to right,rgba(0,0,0,0.03) 1px ,transparent 1px);
-
+                linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.03) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    to right,
+                    rgba(0, 0, 0, 0.03) 1px,
+                    transparent 1px
+                );
         }
     }
-    main{
+    main {
         display: grid;
         grid-template-columns: auto 1fr;
     }
 
-    .blog-grid{
+    .blog-grid {
         display: grid;
         gap: 44px;
-        grid-template-columns: repeat(auto-fill,minmax(min(650px,100%),1fr));
+        grid-template-columns: repeat(auto-fill, minmax(min(650px, 100%), 1fr));
     }
 
-    
-	.blog-post{
+    .blog-post {
         display: flex;
         flex-direction: column;
         align-items: center;
         height: 100%;
-	}
+    }
 
-	img{
-		width: 100%;
-		aspect-ratio: 16/9;
-		transition: all 250ms;
+    img {
+        width: 100%;
+        aspect-ratio: 16/9;
+        transition: all 250ms;
         object-fit: cover;
-	}
+    }
 </style>

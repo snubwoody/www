@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import "../../../styles/blog.css";
-import { formatDate } from "../../../lib/format";
-import { getEntry, getCollection, render } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
+import { BookOpenText, Calendar, Clock3 } from "@lucide/astro";
 import SimilarArticles from "../../../components/blog/SimilarArticles.astro";
-import { Calendar, Clock3, BookOpenText } from "@lucide/astro";
+import { formatDate } from "../../../lib/format";
 
 const { article } = Astro.params;
 export const getStaticPaths = async () => {

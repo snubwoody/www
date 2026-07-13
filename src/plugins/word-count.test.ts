@@ -1,4 +1,4 @@
-import { test, expect } from "vitest";
+import { expect, test } from "vitest";
 import { readingTime, splitWords } from "./word-count";
 
 test("Split words", () => {

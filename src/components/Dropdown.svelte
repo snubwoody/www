@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { DropdownMenu } from "bits-ui";
     import { ChevronDown } from "@lucide/svelte";
+    import { DropdownMenu } from "bits-ui";
     import type { Snippet } from "svelte";
 
     interface Props {

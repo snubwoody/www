@@ -2,6 +2,7 @@
     import Dropdown from "@components/Dropdown.svelte";
     import { DropdownMenu } from "bits-ui";
     import type { SortOption } from "../../lib";
+
     // TODO: close on click
 
     interface Props {

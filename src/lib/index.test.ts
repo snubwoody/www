@@ -1,5 +1,5 @@
-import { test, describe, expect } from "vitest";
-import { sortPosts, getPosts } from "./index.ts";
+import { describe, expect, test } from "vitest";
+import { getPosts, sortPosts } from "./index.ts";
 
 describe("Sort posts", () => {
     test("by title", async () => {
@@ -33,8 +33,8 @@ test("Preview posts are filtered out", async () => {
 test("Posts have correct author", async () => {
     const posts = await getPosts();
     posts.forEach((post) => {
-        if (post.data.author != "Wakunguma Kalimukwa") {
-            throw "Post does not have required frontmatter properties";
+        if (post.data.author !== "Wakunguma Kalimukwa") {
+            throw "Post has incorrect author";
         }
     });
 });

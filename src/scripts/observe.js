@@ -8,4 +8,6 @@ const observer = new IntersectionObserver((entries) => {
     });
 });
 
-elements.forEach((el) => observer.observe(el));
+elements.forEach((el) => {
+    observer.observe(el);
+});
