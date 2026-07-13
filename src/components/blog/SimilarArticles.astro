@@ -1,11 +1,11 @@
 ---
 import { getCollection } from "astro:content";
-import {ChevronRight} from "@lucide/astro/icons";
+import { ChevronRight } from "@lucide/astro/icons";
 
-let articles = await getCollection("articles",(post) => {
+let articles = await getCollection("articles", (post) => {
     return post.data.preview !== true;
 });
-articles = articles.splice(0,5);
+articles = articles.splice(0, 5);
 ---
 
 <h6>Similar articles</h6>

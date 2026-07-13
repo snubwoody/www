@@ -1,5 +1,4 @@
-import {toString} from "mdast-util-to-string";
-
+import { toString } from "mdast-util-to-string";
 
 /**
  * @typedef {import('mdast').Root} Root
@@ -10,11 +9,11 @@ import {toString} from "mdast-util-to-string";
  */
 export const WORDS_PER_MINUTE = 200;
 
-export default function plugin(){
+export default function plugin() {
     /**
      * @param {import('mdast').Root} tree
      */
-    return function (tree,file){
+    return function (tree, file) {
         const words = splitWords(toString(tree));
         const minutes = readingTime(words);
         file.data.astro.frontmatter.wordCount = words.length;
@@ -30,7 +29,8 @@ export default function plugin(){
  * @returns {string[]} An array of words
  */
 export const splitWords = (text) => {
-    return text.split("\n")
+    return text
+        .split("\n")
         .flatMap((line) => line.split(" "))
         .filter((word) => word.length > 0);
 };
@@ -43,5 +43,5 @@ export const splitWords = (text) => {
  */
 export const readingTime = (words) => {
     const minutesToRead = Math.round(words.length / WORDS_PER_MINUTE);
-    return Math.max(minutesToRead,1);
+    return Math.max(minutesToRead, 1);
 };

@@ -15,25 +15,25 @@ export default defineConfig({
     prefetch: true,
     markdown: {
         processor: unified({
-            remarkPlugins: [wordCount]
+            remarkPlugins: [wordCount],
         }),
         shikiConfig: {
             themes: {
                 light: "everforest-light",
-                dark: "everforest-dark"
-            }
-        }
+                dark: "everforest-dark",
+            },
+        },
     },
-    integrations: [
-        svelte(),
-        sitemap()
-    ],
+    integrations: [svelte(), sitemap()],
     vite: {
-        plugins: [
-            tailwindcss()
-        ]
+        plugins: [tailwindcss()],
     },
-    adapter: !(process.env.VERCEL_ENV === "production" || process.env.VERCEL_ENV === "preview") ? node({
-        mode: "standalone"
-    }) : vercel()
+    adapter: !(
+        process.env.VERCEL_ENV === "production" ||
+        process.env.VERCEL_ENV === "preview"
+    )
+        ? node({
+              mode: "standalone",
+          })
+        : vercel(),
 });

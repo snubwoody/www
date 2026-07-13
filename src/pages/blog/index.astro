@@ -1,10 +1,10 @@
 ---
 import Layout from "../../layouts/BaseLayout.astro";
 import ArticleList from "../../components/blog/ArticleList.astro";
-import {getPosts} from "../../lib";
+import { getPosts } from "../../lib";
 
-const articles = await getPosts({sort: true});
-const latestPosts = articles.slice(0,5);
+const articles = await getPosts({ sort: true });
+const latestPosts = articles.slice(0, 5);
 export const prerender = false;
 ---
 

@@ -1,26 +1,31 @@
-@import './app.css';
+@import "./app.css";
 
-.blog-content{
+.blog-content {
     @apply space-y-16;
 
     /*max-width: 75ch;*/
 
-    li{
-        &::before{
-            content: '•';
+    li {
+        &::before {
+            content: "•";
             margin-right: 8px;
         }
     }
 
-	h1,h2,h3,h4,h5,h6{
-		margin-bottom: 0.75rem;
-	}
-	
-    pre{
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin-bottom: 0.75rem;
+    }
+
+    pre {
         overflow: auto;
-		background-color: var(--color-surface-neutral-dim) !important;
-		padding: 24px;
-	}
+        background-color: var(--color-surface-neutral-dim) !important;
+        padding: 24px;
+    }
 
     code:not(pre > code) {
         width: fit-content;
@@ -30,13 +35,11 @@
         background-color: var(--color-surface-neutral-dim);
     }
 
-    a{
+    a {
         display: inline;
     }
 
-
-
-    a{
+    a {
         color: var(--color-text-body);
         text-decoration: underline var(--color-purple-300);
         -webkit-text-decoration-style: underline;
@@ -44,12 +47,8 @@
         text-underline-offset: 4px;
     }
 
-
-
-    blockquote{
+    blockquote {
         padding: 16px;
         border-left: 3px solid var(--color-border-brand);
     }
 }
-
-

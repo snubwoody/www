@@ -31,7 +31,7 @@
         "@astrojs/rss": "^4.0.18",
         "@astrojs/sitemap": "^3.7.2",
         "@eslint/js": "^10.0.1",
-    		"@biomejs/biome": "2.5.3",
+        "@biomejs/biome": "2.5.3",
         "@lucide/astro": "^1.24.0",
         "@lucide/svelte": "^1.24.0",
         "@playwright/test": "^1.61.1",

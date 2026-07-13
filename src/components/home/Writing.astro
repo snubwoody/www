@@ -4,8 +4,7 @@ import { getPosts } from "../../lib";
 import { formatDate } from "../../lib/format";
 let posts = await getPosts();
 const totalPosts = posts.length;
-posts = posts.slice(0,5);
-
+posts = posts.slice(0, 5);
 ---
 
 <section class="flex max-md:flex-col px-20 md:px-64 py-128 gap-32 md:gap-64">

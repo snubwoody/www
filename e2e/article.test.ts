@@ -8,7 +8,7 @@ test("Page title", async ({ page }) => {
 test("Sort button default", async ({ page }) => {
     await page.goto("/blog");
     await expect(
-        page.getByRole("button", { name: "Sort by: Date created" })
+        page.getByRole("button", { name: "Sort by: Date created" }),
     ).toBeVisible();
 });
 
@@ -18,7 +18,7 @@ test("Click sort button", async ({ page }) => {
     await page.getByRole("link", { name: "Title" }).click();
     await expect(page).toHaveURL("/blog?sort_by=title");
     await expect(
-        page.getByRole("button", { name: "Sort by: Title" })
+        page.getByRole("button", { name: "Sort by: Title" }),
     ).toBeVisible();
 });
 

@@ -3,13 +3,13 @@ import WhatsappLogo from "../../assets/external/icons/whatsapp-logo.svg";
 import FacebookLogo from "../../assets/external/icons/facebook-logo.png";
 import XLogoBlack from "../../assets/external/icons/x-logo-black.png";
 import XLogoWhite from "../../assets/external/icons/x-logo-white.png";
-import {Image} from "astro:assets";
+import { Image } from "astro:assets";
 
 type Props = {
-    postId: string
+    postId: string;
 };
 
-const {postId}: Props = Astro.props;
+const { postId }: Props = Astro.props;
 const url = `https://www.wakunguma.com/blog/${postId}`;
 const twitterLink = `http://www.twitter.com/share?url=${url}`;
 const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${url}`;

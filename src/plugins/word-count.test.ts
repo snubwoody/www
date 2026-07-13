@@ -1,8 +1,10 @@
-import {test,expect} from "vitest";
-import {readingTime, splitWords} from "./word-count";
+import { test, expect } from "vitest";
+import { readingTime, splitWords } from "./word-count";
 
 test("Split words", () => {
-    const words = splitWords("Three frogs flew through France\nThen died in a car crash");
+    const words = splitWords(
+        "Three frogs flew through France\nThen died in a car crash",
+    );
     expect(words).toHaveLength(11);
 });
 
