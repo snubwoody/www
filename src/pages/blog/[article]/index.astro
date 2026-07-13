@@ -42,16 +42,28 @@ const image = post.data.image;
 
 <BaseLayout title={post.data.title}>
     <Fragment slot="head">
-        <meta name="og:url" content={`https://www.wakunguma.com/blog/${post.id}`}>
-        <meta property="og:image" content={`https://www.wakunguma.com${image}`}>
-        <meta property="og:locale" content="en_GB">
-        <meta property="og:image:url" content={`https://www.wakunguma.com${image}`}>
-        <meta property="article:author" content="Wakunguma Kalimukwa">
-        <meta name="twitter:card" content={"summary_large_image"}>
-        <meta name="twitter:image" content={`https://www.wakunguma.com${image}`}>
+        <meta
+            name="og:url"
+            content={`https://www.wakunguma.com/blog/${post.id}`}
+        />
+        <meta
+            property="og:image"
+            content={`https://www.wakunguma.com${image}`}
+        />
+        <meta property="og:locale" content="en_GB" />
+        <meta
+            property="og:image:url"
+            content={`https://www.wakunguma.com${image}`}
+        />
+        <meta property="article:author" content="Wakunguma Kalimukwa" />
+        <meta name="twitter:card" content={"summary_large_image"} />
+        <meta
+            name="twitter:image"
+            content={`https://www.wakunguma.com${image}`}
+        />
     </Fragment>
     <main class="flex flex-col justify-center items-center scroll-smooth">
-        <img src={image} alt="" class="thumbnail">
+        <img src={image} alt="" class="thumbnail" />
         <div class="main-content">
             <header>
                 <a class="btn-underline mb-8 w-fit" href="/">
@@ -60,40 +72,52 @@ const image = post.data.image;
                 <h1 class="max-md:text-h3 mb-20">{post.data.title}</h1>
                 <ul class="metadata">
                     <li>
-                        <Calendar size='16'/>
+                        <Calendar size="16" />
                         <p>{formatDate(post.data.published.toString())}</p>
                     </li>
                     <li class="metadata-divider" aria-hidden="true"></li>
                     <li>
-                        <BookOpenText size='16'/>
+                        <BookOpenText size="16" />
                         <p>{frontmatter.wordCount} words</p>
                     </li>
                     <li class="metadata-divider" aria-hidden="true"></li>
                     <li>
-                        <Clock3 size='16'/>
+                        <Clock3 size="16" />
                         <p>{frontmatter.minutesToRead} minute read</p>
                     </li>
                 </ul>
             </header>
             <div class="w-full bg-purple-500 h-5"></div>
-            <div class="flex px-8 md:px-24 lg:px-64 gap-64 pb-64 justify-center">
+            <div
+                class="flex px-8 md:px-24 lg:px-64 gap-64 pb-64 justify-center"
+            >
                 <div class="space-y-40">
                     <article class="blog-content">
-                        <Content/>
+                        <Content />
                     </article>
-                    <SimilarArticles/>
+                    <SimilarArticles />
                 </div>
-                <aside aria-label="Table of contents">
-                    <h6>On this page</h6>
-                    <ul>
-                        {headings.map(heading => (
-                            <li style={{ "--depth": `${heading.depth - 2}` }} class="heading-link">
-                                <a href={`#${heading.slug}`}>{heading.text}</a>
-                            </li>
-                        )
-                        )}
-                    </ul>
-                </aside>
+                {
+                    headings.length > 0 ? (
+                        <aside aria-label="Table of contents">
+                            <h6>On this page</h6>
+                            <ul>
+                                {headings.map((heading) => (
+                                    <li
+                                        style={{
+                                            "--depth": `${heading.depth - 2}`,
+                                        }}
+                                        class="heading-link"
+                                    >
+                                        <a href={`#${heading.slug}`}>
+                                            {heading.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </aside>
+                    ) : null
+                }
             </div>
         </div>
     </main>
@@ -114,7 +138,7 @@ const image = post.data.image;
         }
     }
 
-    .main-content{
+    .main-content {
         display: flex;
         flex-direction: column;
         gap: 36px;
@@ -127,7 +151,7 @@ const image = post.data.image;
         }
     }
 
-    .metadata{
+    .metadata {
         display: flex;
         align-items: center;
         gap: 16px;
@@ -138,14 +162,14 @@ const image = post.data.image;
             gap: 8px;
         }
 
-        li{
+        li {
             display: flex;
             align-items: center;
             gap: 8px;
             color: var(--color-text-neutral);
         }
 
-        .metadata-divider{
+        .metadata-divider {
             width: 2px;
             height: 24px;
             background-color: var(--color-neutral-50);
@@ -156,13 +180,13 @@ const image = post.data.image;
         }
     }
 
-    header{
+    header {
         display: flex;
         flex-direction: column;
         padding-top: 32px;
     }
 
-    .thumbnail{
+    .thumbnail {
         width: 100%;
         object-fit: cover;
         aspect-ratio: 21/9;
@@ -172,13 +196,13 @@ const image = post.data.image;
         }
     }
 
-    .heading-link{
+    .heading-link {
         padding: 8px 16px;
         margin-left: calc(16px * var(--depth));
-        border-left: 2px solid color-mix(in oklch, black 5%,transparent);
+        border-left: 2px solid color-mix(in oklch, black 5%, transparent);
         position: relative;
         [data-theme="dark"] & {
-            border-color: color-mix(in oklch, white 5%,transparent)
+            border-color: color-mix(in oklch, white 5%, transparent);
         }
     }
 </style>
