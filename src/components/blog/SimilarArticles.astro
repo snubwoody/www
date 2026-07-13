@@ -8,20 +8,20 @@ let articles = await getCollection("articles", (post) => {
 articles = articles.splice(0, 5);
 ---
 
-<h6>Similar articles</h6>
-<ul class="space-y-16">
-    {
-        articles.map((article) => (
-            <>
-                <a
-                    href={`/blog/${article.id}`}
-                    class="flex items-center justify-between"
-                >
-                    <p>{article.data.title}</p>
-                    <ChevronRight size="20" />
-                </a>
-                <li class="y-divider" />
-            </>
-        ))
-    }
-</ul>
+<div class="space-y-8">
+    <h6>Similar articles</h6>
+    <ul class="space-y-4">
+        {
+            articles.map((article) => (
+                <>
+                    <a
+                        href={`/blog/${article.id}`}
+                        class="flex items-center justify-between text-accent"
+                    >
+                        <p>{article.data.title}</p>
+                    </a>
+                </>
+            ))
+        }
+    </ul>
+</div>
