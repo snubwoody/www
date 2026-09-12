@@ -23,7 +23,7 @@ body {
 
 @layer components {
     .body-padding {
-        padding-inline: 120px;
+        padding-inline: 240px;
 
         @media (width < 768px) {
             padding: 36px;
