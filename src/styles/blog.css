@@ -47,4 +47,31 @@
         padding: 16px;
         border-left: 3px solid var(--color-border-accent);
     }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow-wrap: normal;
+        text-align: start;
+
+        thead {
+            padding: 4px;
+        }
+
+        th {
+            text-align: start;
+            white-space: nowrap;
+            font-weight: var(--font-weight-medium);
+            background: var(--color-surface);
+        }
+
+        th,
+        td {
+            padding: 12px;
+        }
+
+        tr:nth-child(2n) {
+            background: var(--color-surface);
+        }
+    }
 }
