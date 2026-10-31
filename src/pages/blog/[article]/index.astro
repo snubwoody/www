@@ -69,21 +69,25 @@ const image = post.data.image;
                 </li>
             </ul>
         </header>
-        <div class="flex gap-56 pb-64 justify-center relative">
+        <div class="flex gap-56 pb-64 relative">
             <article class="blog-content">
                 <Content />
             </article>
             <!--TODO: hide if there are no headings (and test)-->
-            <div class="w-full max-w-[20ch] space-y-8 toc max-md:hidden">
-                <h6 class="font-medium">Contents</h6>
-                <ul class="space-y-8">
-                    {headings.map((heading) =>
-                        <li style={{"--depth": `${heading.depth - 2}`}}>
-                            <a href={`#${heading.slug}`}>{heading.text}</a>
-                        </li>
-                    )}
-                </ul>
-            </div>
+            {headings.length > 0 ?
+                <div class="w-full max-w-[20ch] space-y-8 toc max-md:hidden">
+                    <h6 class="font-medium">Contents</h6>
+                    <ul class="space-y-8">
+                        {headings.map((heading) =>
+                            <li style={{"--depth": `${heading.depth - 2}`}}>
+                                <a href={`#${heading.slug}`}>{heading.text}</a>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+                : null
+            }
+
         </div>
     </main>
 </BaseLayout>
