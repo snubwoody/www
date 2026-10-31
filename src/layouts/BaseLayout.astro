@@ -48,12 +48,14 @@ const { title = "Wakunguma Kalimukwa", description } = Astro.props;
         />
     </head>
     <body>
-        <Navbar/>
-        <slot />
-        <div class="hidden">
-            <Analytics/>
+        <div>
+            <Navbar/>
+            <slot />
+            <div class="hidden">
+                <Analytics/>
+            </div>
+            <Footer/>
         </div>
-        <Footer/>
     </body>
 </html>
 
@@ -68,5 +70,17 @@ const { title = "Wakunguma Kalimukwa", description } = Astro.props;
     body{
         display: grid;
         grid-template-rows: auto 1fr auto;
+        align-items: center;
+        padding-inline: 64px;
+
+        @media (width < 768px) {
+            padding-inline: 32px;
+        }
+    }
+
+    div{
+        max-width: 110ch;
+        margin-inline: auto;
+        width: 100%;
     }
 </style>

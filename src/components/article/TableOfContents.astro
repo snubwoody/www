@@ -1,0 +1,60 @@
+---
+import type { MarkdownHeading } from "@astrojs/markdown-remark";
+
+type Props = {
+    headings: MarkdownHeading[]
+}
+
+const { headings }: Props = Astro.props;
+---
+
+<div class="w-full max-w-[20ch] space-y-8 toc max-md:hidden">
+    <h6 class="font-medium">Contents</h6>
+    <ul class="space-y-8">
+        {headings.map((heading) =>
+            <li style={{"--depth": `${heading.depth - 2}`}}>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+        )}
+    </ul>
+</div>
+
+<style>
+    .toc {
+        position: sticky;
+        top: 2em;
+        height: fit-content;
+        overflow-y: scroll;
+        max-height: 60vh;
+        li{
+            margin-left: calc(16px * var(--depth));
+        }
+    }
+
+    .toc a{
+        width: fit-content;
+        max-width: 100%;
+        position: relative;
+        color: var(--color-accent);
+
+        &::after {
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            content: "";
+            width: 100%;
+            height: 2px;
+            opacity: 0;
+            transform: scaleX(0);
+            background: var(--color-accent);
+            transition: all 250ms cubic-bezier(.79,.14,.15,.86);
+        }
+
+        &:hover {
+            &::after {
+                transform: scaleX(1);
+                opacity: 1;
+            }
+        }
+    }
+</style>

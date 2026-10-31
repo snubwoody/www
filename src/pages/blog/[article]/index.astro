@@ -2,6 +2,7 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import "../../../styles/blog.css";
 import { getCollection, getEntry, render } from "astro:content";
+import TableOfContents from "@components/article/TableOfContents.astro";
 import { formatDate } from "../../../lib/format";
 
 const { article } = Astro.params;
@@ -27,7 +28,7 @@ if (!post) {
     return Astro.redirect("/404");
 }
 
-const { Content, remarkPluginFrontmatter: frontmatter } = await render(post);
+const { Content, remarkPluginFrontmatter: frontmatter, headings } = await render(post);
 
 const image = post.data.image;
 ---
@@ -54,7 +55,7 @@ const image = post.data.image;
             content={`https://www.wakunguma.com${image}`}
         />
     </Fragment>
-    <main class="content">
+    <main class="content relative">
         <header>
             <h1 class="max-md:text-h3 mb-8 text-h1 font-medium">
                 {post.data.title}
@@ -69,12 +70,15 @@ const image = post.data.image;
                 </li>
             </ul>
         </header>
-        <div class="flex gap-64 pb-64 justify-center">
-            <div class="space-y-40">
-                <article class="blog-content">
-                    <Content />
-                </article>
-            </div>
+        <div class="flex gap-56 pb-64 relative">
+            <article class="blog-content">
+                <Content />
+            </article>
+            {headings.length > 0 ?
+                <TableOfContents {headings}/>
+                : null
+            }
+
         </div>
     </main>
 </BaseLayout>
@@ -86,12 +90,7 @@ const image = post.data.image;
         gap: 36px;
         width: 100%;
         scroll-behavior: smooth;
-        max-width: 90ch;
         margin: 0 auto;
-
-        @media (width < 768px) {
-            padding-inline: 40px;
-        }
     }
 
     .metadata {
@@ -130,16 +129,6 @@ const image = post.data.image;
 
         @media (width < 768px) {
             aspect-ratio: 16/9;
-        }
-    }
-
-    .heading-link {
-        padding: 8px 16px;
-        margin-left: calc(16px * var(--depth));
-        border-left: 2px solid color-mix(in oklch, black 5%, transparent);
-        position: relative;
-        [data-theme="dark"] & {
-            border-color: color-mix(in oklch, white 5%, transparent);
         }
     }
 </style>
