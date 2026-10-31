@@ -5,22 +5,10 @@ import { formatDate } from "../../lib/format";
 
 const articles = await getPosts({ sort: true });
 const posts = sortPosts(articles, "date_created");
-
-// Accent colors
-// #465C69 - Blue Slate
-// #98A886 - Muted Teal
-// #363457 - Space Indigo
-// #FE7F2D - Pumpkin Spice
-// #69140E - Dark Garnet
-// #A44200 - Rust Brown
-
-// Background colors
-// #F7F7F2 - Porcelain
-// #FBFFEB - Ivory
 ---
 
 <Layout title="Browse articles">
-    <main class="body-padding py-44 space-y-36">
+    <main class="py-44 space-y-36">
         <header>
             <h3>Articles</h3>
         </header>
