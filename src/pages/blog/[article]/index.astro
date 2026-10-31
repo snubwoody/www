@@ -2,8 +2,8 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import "../../../styles/blog.css";
 import { getCollection, getEntry, render } from "astro:content";
-import { formatDate } from "../../../lib/format";
 import TableOfContents from "@components/article/TableOfContents.astro";
+import { formatDate } from "../../../lib/format";
 
 const { article } = Astro.params;
 export const getStaticPaths = async () => {
