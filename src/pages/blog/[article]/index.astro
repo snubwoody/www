@@ -54,7 +54,7 @@ const image = post.data.image;
             content={`https://www.wakunguma.com${image}`}
         />
     </Fragment>
-    <main class="content">
+    <main class="content relative">
         <header>
             <h1 class="max-md:text-h3 mb-8 text-h1 font-medium">
                 {post.data.title}
@@ -94,6 +94,11 @@ const image = post.data.image;
 
 <style>
     .toc {
+        position: sticky;
+        top: 2em;
+        height: fit-content;
+        overflow-y: scroll;
+        max-height: 60vh;
         li{
             margin-left: calc(16px * var(--depth));
         }
