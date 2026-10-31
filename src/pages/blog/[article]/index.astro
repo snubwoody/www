@@ -74,7 +74,7 @@ const image = post.data.image;
                 <Content />
             </article>
             <!--TODO: hide if there are no headings (and test)-->
-            <div class="w-full max-w-[20ch] space-y-8 toc">
+            <div class="w-full max-w-[20ch] space-y-8 toc max-md:hidden">
                 <h6 class="font-medium">Contents</h6>
                 <ul class="space-y-8">
                     {headings.map((heading) =>

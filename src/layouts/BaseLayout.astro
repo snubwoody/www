@@ -71,6 +71,11 @@ const { title = "Wakunguma Kalimukwa", description } = Astro.props;
         display: grid;
         grid-template-rows: auto 1fr auto;
         align-items: center;
+        padding-inline: 64px;
+
+        @media (width < 768px) {
+            padding-inline: 32px;
+        }
     }
 
     div{
