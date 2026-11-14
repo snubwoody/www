@@ -28,6 +28,10 @@ const { headings }: Props = Astro.props;
         max-height: 60vh;
         li{
             margin-left: calc(16px * var(--depth));
+
+            &:last-of-type{
+                margin-bottom: 1rem;
+            }
         }
     }
 
